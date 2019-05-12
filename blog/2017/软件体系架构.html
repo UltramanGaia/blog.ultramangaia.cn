@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Introduction of software architecturewhat is Software Architecture?The software architecture of a system is the set of structures needed to reason about the system, which comprise software elements, r">
+<meta name="keywords" content="软件体系架构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="软件体系架构">
+<meta property="og:url" content="http://blog.ultramangaia.cn/blog/2017/软件体系架构.html">
+<meta property="og:site_name" content="UltramanGaia&#39;s Blog">
+<meta property="og:description" content="Introduction of software architecturewhat is Software Architecture?The software architecture of a system is the set of structures needed to reason about the system, which comprise software elements, r">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.ultramangaia.cn/img/architecture/1.png">
+<meta property="og:updated_time" content="2019-01-19T16:10:05.154Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="软件体系架构">
+<meta name="twitter:description" content="Introduction of software architecturewhat is Software Architecture?The software architecture of a system is the set of structures needed to reason about the system, which comprise software elements, r">
+<meta name="twitter:image" content="http://blog.ultramangaia.cn/img/architecture/1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://blog.ultramangaia.cn/blog/2017/软件体系架构.html"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>软件体系架构 | UltramanGaia's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UltramanGaia's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.ultramangaia.cn/blog/2017/软件体系架构.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="UltramanGaia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UltramanGaia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">软件体系架构
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-12-30 17:22:06" itemprop="dateCreated datePublished" datetime="2017-12-30T17:22:06+08:00">2017-12-30</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-01-20 00:10:05" itemprop="dateModified" datetime="2019-01-20T00:10:05+08:00">2019-01-20</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/课程/" itemprop="url" rel="index"><span itemprop="name">课程</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Introduction-of-software-architecture"><a href="#Introduction-of-software-architecture" class="headerlink" title="Introduction of software architecture"></a>Introduction of software architecture</h1><h2 id="what-is-Software-Architecture"><a href="#what-is-Software-Architecture" class="headerlink" title="what is Software Architecture?"></a>what is Software Architecture?</h2><h4 id="The-software-architecture-of-a-system-is-the-set-of-structures-needed-to-reason-about-the-system-which-comprise-software-elements-relations-among-them-and-properties-of-both"><a href="#The-software-architecture-of-a-system-is-the-set-of-structures-needed-to-reason-about-the-system-which-comprise-software-elements-relations-among-them-and-properties-of-both" class="headerlink" title="The software architecture of a system is the set of structures needed to reason about the system, which comprise software elements, relations among them, and properties of both."></a>The software architecture of a system is the set of structures needed to reason about the system, which comprise <em>software elements</em>, <em>relations</em> among them, and <em>properties</em> of both.</h4><h3 id="Module-Structure"><a href="#Module-Structure" class="headerlink" title="Module Structure"></a>Module Structure</h3><p>将系统划分成实现单元，即模块，来分别实现，注重于coding阶段<br>Module结构将系统划分成多个实现单元，即模块，这些模块被赋予了特定的计算职责。<br>Module structures embody decisions as to how the system is to be structured as a set of <em>code or data units</em><br>模块结构体现了系统将如何构造成一组代码或数据单元的决策。</p>
+<h4 id="Some-useful-module-structures"><a href="#Some-useful-module-structures" class="headerlink" title="Some useful module structures"></a>Some useful module structures</h4><ul>
+<li>Decomposition structure 分解结构<br>is-a-submodule-of关系，确保了modifiability可修改性</li>
+<li>Uses structure 使用结构<br>classes，，use关系，需要使用前面的东西，确保了可增量开发</li>
+<li>Layer sructure 分层结构<br>layers，，virtual machine，确保了portability可移植性</li>
+<li>class(or generalization) structure 类结构<br>classes，，inherits from or is an instance of关系，确保了reuse和增量开发(the incremental addition of functionality)</li>
+<li>Data Module structure 数据模型结构<br>静态信息结构，数据实体和它们的关系</li>
+</ul>
+<h3 id="Component-and-Connector-Structure"><a href="#Component-and-Connector-Structure" class="headerlink" title="Component and Connector Structure"></a>Component and Connector Structure</h3><p>元素之间的交互，注重于runtime运行时阶段<br>C&amp;C结构关注在运行时元素之间的交互去执行系统功能。<br>Component-and-connector structures embody decisions as to how the system is to be structured as a set of elements that have <em>runtime</em> behavior(components) and interactions(connectors).<br>组件和连接器结构体现了如何将系统构造成一组具有运行时行为（组件）和交互（连接器）的元素的决策。<br>runtime components:</p>
+<ul>
+<li>services</li>
+<li>peers</li>
+<li>clinents</li>
+<li>servers</li>
+<li>many other types of runtime element<br>connectors:</li>
+<li>call-return</li>
+<li>process synchronization operators</li>
+<li>pipes</li>
+</ul>
+<h4 id="Some-useful-C-amp-C-Structure"><a href="#Some-useful-C-amp-C-Structure" class="headerlink" title="Some useful C&amp;C Structure"></a>Some useful C&amp;C Structure</h4><ul>
+<li>Service structure<br>services,,通过服务协作机制如SOAP进行交互，确保了服务组件可以匿名开发或独立开发</li>
+<li>Concurrency Structure<br>This structure helps determine opportunities for parallelism and the locations where resource contention may occur.<br>这种结构有助于确定并行性的机会和资源争用的地方。<br>units are components，connectors are their communication mechanism，components are arranged into logical threads，parallelism</li>
+</ul>
+<h3 id="Allocation-Structure"><a href="#Allocation-Structure" class="headerlink" title="Allocation Structure"></a>Allocation Structure</h3><p>分配结构描述了从软件结构到系统环境的映射(组织、开发、安装、执行环境)<br>Allocation structures show the relationship between the software elements and elements in one or more external environments in which the software is created and executed.<br>分配结构显示了在创建或执行软件的一个或多个外部环境中的软件元素和元素之间的关系。</p>
+<ul>
+<li>processor</li>
+<li>directories, files…</li>
+<li>assignment of each software element to development teams<h4 id="Some-useful-Allocation-structures"><a href="#Some-useful-Allocation-structures" class="headerlink" title="Some useful Allocation structures"></a>Some useful Allocation structures</h4></li>
+<li>Deployment structure<br>The deployment structure shows how software is assigned to hardware processing and communication elements.<br>部署结构显示软件是如何分配给硬件处理和通信元素的。<br>allocated-to关系<br>performance, data integrity, security, and availability </li>
+<li>Implement structure<br>This structure shows how software elements (usually modules) are mapped to the file structure(s) in the system’s development, integration, or configuration control environments.<br>这个结构显示了软件元素（通常是模块）如何映射到系统开发、集成或配置控制环境中的文件结构中。</li>
+<li>Work assignment structure<br>This structure assigns responsibility for implementing and integrating the modules to the teams who will carry it out.<br>这种结构将执行和集成模块的责任分配给执行它的团队。</li>
+</ul>
+<h5 id="结构和视图-structure-and-view"><a href="#结构和视图-structure-and-view" class="headerlink" title="结构和视图　structure and view"></a>结构和视图　structure and view</h5><ul>
+<li>A view is a representation of a coherent set of architectural elements, as written by and read by system stakeholders. </li>
+<li>A structure is the set of elements itself, as they exist in software or hardware.<br>视图是结构的表示。</li>
+</ul>
+<h3 id="Architecture-Pattern-架构模式"><a href="#Architecture-Pattern-架构模式" class="headerlink" title="Architecture Pattern 架构模式"></a>Architecture Pattern 架构模式</h3><p>An architectural pattern presents the element types and their forms of interaction used in solving a particular problem.<br>体系结构模式展示了用于解决特定问题的元素类型及其交互形式。</p>
+<ul>
+<li>Module type pattern<ul>
+<li>Layered pattern<br>软件元素之间的使用关系是严格单向的</li>
+</ul>
+</li>
+<li>Component-and-connector type pattern<ul>
+<li>Shared-data(or repository) pattern<br>This pattern comprises components and connectors that create, store, and access persistent data.<br>该模式包括创建、存储和访问持久数据的组件和连接器。</li>
+<li>Client-server pattern</li>
+<li>Peer-to-peer pattern</li>
+</ul>
+</li>
+<li>Allocation type pattern<ul>
+<li>Multi-tier pattern 多层模式<br>This pattern specializes the generic deployment (software-to-hardware allocation) structure. Describes how to distribute and allocate the components of a system in distinct subsets of hardware and software, connected by some communication medium.<br>此模式专门用于泛型部署（软件到硬件分配）结构。描述如何在不同的通信介质连接的硬件和软件的不同子集中分配和分配系统的组件。</li>
+<li>Competence center pattern 能力中心模式<br>In competence center, work is allocated to sites depending on the technical or domain expertise located at a site.<br>在能力中心，工作分配给地点，取决于位于某个地点的技术或领域专门知识。</li>
+<li>Platform pattern 平台模式<br>In platform, one site is tasked with developing reusable core assets of a software product line, and other sites develop applications that use the core assets.<br>在平台上，一个站点负责开发软件产品线的可重用核心资产，而其他站点则开发使用核心资产的应用程序。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Why-Is-Software-Architecture-Important"><a href="#Why-Is-Software-Architecture-Important" class="headerlink" title="Why Is Software Architecture Important?"></a>Why Is Software Architecture Important?</h2><ol>
+<li>An architecture will inhibit or enable a system’s driving quality attributes.<br>体系结构将抑制或启用系统的驱动质量属性。</li>
+<li>The decisions made in an architecture allow you to reason about and manage change as the system evolves.<br>体系结构中的决策允许您在系统演进时推理和管理更改。</li>
+<li>The analysis of an architecture enables early prediction of a system’s qualities.<br>对体系结构的分析可以对系统的质量进行早期预测。</li>
+<li>A documented architecture enhances communication among stakeholders.<br>文档化体系结构增强了涉众之间的沟通。</li>
+<li>The architecture is a carrier of the earliest and hence most fundamental, hardest-to-change design decisions.<br>体系结构是最早、最基本、最难改变设计决策的载体。</li>
+<li>An architecture defines a set of constraints on subsequent implementation.<br>体系结构在随后的实现中定义了一组约束。</li>
+<li>The architecture dictates the structure of an organization, or vice versa.<br>体系结构决定了一个组织的结构，反之亦然。</li>
+<li>An architecture can provide the basis for evolutionary prototyping.<br>体系结构可以为演化原型提供基础。</li>
+<li>An architecture allows the architect and project manager to reason about cost and schedule.<br>体系结构允许架构师和项目经理推断成本和进度。</li>
+<li>An architecture can be created as a transferable, reusable model that form the heart of a product line.<br>体系结构可以创建为可转移的、可重用的模型，形成产品线的核心。</li>
+<li>Architecture-based development focuses attention on the assembly of components, rather than simply on their creation.<br>基于体系结构的开发关注的是组件的组装，而不是简单地创建它们。</li>
+<li>By restricting design alternatives, architecture channels the creativity of developers, reducing design and system complexity.<br>通过限制设计方案，体系结构可以拓宽开发人员的创造力，减少设计和系统复杂性。</li>
+<li>An architecture can be the foundation for training a new team member.<br>架构可以是培训新团队成员的基础。</li>
+</ol>
+<h4 id="Whether-a-system-will-be-able-to-exhibit-its-desired-or-required-quality-attributes-is-substantially-determined-by-its-architecture"><a href="#Whether-a-system-will-be-able-to-exhibit-its-desired-or-required-quality-attributes-is-substantially-determined-by-its-architecture" class="headerlink" title="Whether a system will be able to exhibit its desired (or required) quality attributes is substantially determined by its architecture."></a>Whether a system will be able to exhibit its desired (or required) quality attributes is substantially determined by its architecture.</h4><p>一个系统是否能够展示它的所需（或要求）质量属性是大体上取决于它的架构</p>
+<h3 id="3类变更"><a href="#3类变更" class="headerlink" title="3类变更"></a>3类变更</h3><ul>
+<li>A local change can be accomplished by modifying a single element.</li>
+<li>A nonlocal change requires multiple element modifications but leaves the underlying architectural approach intact.</li>
+<li>An architectural change affects the fundamental ways in which the elements interact with each other and will require changes all over the system.</li>
+</ul>
+<h2 id="The-many-contexts-of-software-architecture-软件体系结构的多种背景"><a href="#The-many-contexts-of-software-architecture-软件体系结构的多种背景" class="headerlink" title="The many contexts of software architecture 软件体系结构的多种背景"></a>The many contexts of software architecture 软件体系结构的多种背景</h2><h3 id="Technical"><a href="#Technical" class="headerlink" title="Technical"></a>Technical</h3><p>What technical role does the software architecture play in the system?<br>软件体系结构在系统中扮演什么样的技术角色？</p>
+<h3 id="Project-life-cycle"><a href="#Project-life-cycle" class="headerlink" title="Project life cycle"></a>Project life cycle</h3><p>How does a software architecture relate to the other phases of a software development life cycle?<br>软件体系结构如何与软件开发生命周期的其他阶段相关联？</p>
+<h3 id="Business"><a href="#Business" class="headerlink" title="Business"></a>Business</h3><p>How does the presence of a software architecture affect an organization’s business environment?<br>软件体系结构的存在如何影响组织的业务环境？</p>
+<h3 id="Professional"><a href="#Professional" class="headerlink" title="Professional"></a>Professional</h3><p>What is the role of a software architect in an organization or a development project?<br>软件架构师在组织或开发项目中的作用是什么？</p>
+<h5 id="技术环境、项目生命周期、商业环境、架构师职业环境中的软件体系结构。架构与环境的相互影响。"><a href="#技术环境、项目生命周期、商业环境、架构师职业环境中的软件体系结构。架构与环境的相互影响。" class="headerlink" title="技术环境、项目生命周期、商业环境、架构师职业环境中的软件体系结构。架构与环境的相互影响。"></a>技术环境、项目生命周期、商业环境、架构师职业环境中的软件体系结构。架构与环境的相互影响。</h5><p>An architecture has influences that lead to its creation, and its existence has an impact on the architect, the organization, and, potentially, the industry<br>一个架构会影响它的产生，它的存在对架构师，组织，可能还有行业都有影响。</p>
+<h1 id="Quality-attributes"><a href="#Quality-attributes" class="headerlink" title="Quality attributes"></a>Quality attributes</h1><h3 id="Understanding-Quality-Attributes"><a href="#Understanding-Quality-Attributes" class="headerlink" title="Understanding Quality Attributes"></a>Understanding Quality Attributes</h3><p>系统需求可以分为</p>
+<ul>
+<li>Functional requirements 功能需求</li>
+<li>Quality Attribute requirement 质量属性需求</li>
+<li>Constraints 约束<h3 id="两类质量属性"><a href="#两类质量属性" class="headerlink" title="两类质量属性"></a>两类质量属性</h3></li>
+<li>描述系统运行时的属性，availability，performance，usability，security</li>
+<li>描述开发系统时属性 ，modifiability，testability<h3 id="A-solution-to-the-problems-untestable-definitions-and-overlapping-concerns-is-to-use-quality-attribute-scenarios-as-a-means-of-characterizing-quality-attributes"><a href="#A-solution-to-the-problems-untestable-definitions-and-overlapping-concerns-is-to-use-quality-attribute-scenarios-as-a-means-of-characterizing-quality-attributes" class="headerlink" title="A solution to the problems (untestable definitions and overlapping concerns) is to use quality attribute scenarios as a means of characterizing quality attributes."></a>A solution to the problems (untestable definitions and overlapping concerns) is to use quality attribute scenarios as a means of characterizing quality attributes.</h3></li>
+</ul>
+<h3 id="描述质量属性场景-quality-attribute-scenarios"><a href="#描述质量属性场景-quality-attribute-scenarios" class="headerlink" title="描述质量属性场景 quality attribute scenarios"></a>描述质量属性场景 quality attribute scenarios</h3><ol>
+<li>Stimulus<br>The stimulus is a condition that requires a response when it arrives at a system</li>
+<li>Stimulus source<br>This is some entity (a human, a computer system, or any other actuator) that generated the stimulus.</li>
+<li>Response<br>The response is the activity undertaken as the result of the arrival of the stimulus.</li>
+<li>Response measure<br>When the response occurs, it should be measurable in some fashion so that the requirement can be tested</li>
+<li>Environment<br>The stimulus occurs under certain conditions. The system may be in an overload condition or in normal operation, or some other relevant state.</li>
+<li>Artifact<br>This may be a collection of systems, the whole system, or some piece or pieces of it. Some artifact is stimulated.<br><img src="/img/architecture/1.png" alt=""></li>
+</ol>
+<h3 id="质量属性场景分类"><a href="#质量属性场景分类" class="headerlink" title="质量属性场景分类"></a>质量属性场景分类</h3><ul>
+<li><em>General quality attribute scenarios</em> are system independent and can, potentially, pertain to any system</li>
+<li><em>Concrete quality attribute scenarios</em> are specific to the particular system under consideration.</li>
+</ul>
+<h3 id="Tactics"><a href="#Tactics" class="headerlink" title="Tactics"></a>Tactics</h3><p>There are a collection of primitive design techniques that an architect can use to achieve a quality attribute response.<br>有一个原始设计技术的集合，架构师可以使用它来实现质量属性响应。<br>We call these architectural design primitives tactics.</p>
+<h3 id="Tactics-VS-Architectute-pattern"><a href="#Tactics-VS-Architectute-pattern" class="headerlink" title="Tactics VS Architectute pattern"></a>Tactics VS Architectute pattern</h3><ul>
+<li>A tactic is a design decision for a single quality attribute</li>
+<li>A tactic does not consider tradeoffs among quality attributes</li>
+<li>Architectural patterns can be seen as “packages” of tactics, in which tradeoffs are considered</li>
+</ul>
+<h4 id="We-need-to-isolate-catalog-and-describe-the-tactics-Why-do-we-do-this"><a href="#We-need-to-isolate-catalog-and-describe-the-tactics-Why-do-we-do-this" class="headerlink" title="We need to isolate, catalog, and describe the tactics. Why do we do this?"></a>We need to isolate, catalog, and describe the tactics. Why do we do this?</h4><ol>
+<li>Design patterns are complex, and often difficult to apply as is; architects need to modify and adapt them.</li>
+<li>If no pattern exists to realize the architect’s design goal, tactics allow the architect to construct a design fragment from “first principles”.</li>
+<li>By cataloguing tactics, we will have a choice of multiple tactics to improve a particular quality attribute. The choice of which tactics to use depends on factors such as the cost to implement.</li>
+<li>设计模式是复杂的，而且通常很难应用，架构师需要修改和调整它们。</li>
+<li>如果没有模式来实现架构师的设计目标，策略允许架构师从“第一原理”构建一个设计片段。</li>
+<li>通过编目策略，我们可以选择多种策略来改进特定的质量属性。选择使用哪种战术取决于实施成本等因素。</li>
+</ol>
+<h3 id="Guiding-Quality-Design-Decisions"><a href="#Guiding-Quality-Design-Decisions" class="headerlink" title="Guiding Quality Design Decisions"></a>Guiding Quality Design Decisions</h3><ol>
+<li>Allocation of responsibilities 职责分配</li>
+<li>Coordination model 协调模型</li>
+<li>Data model 数据模型</li>
+<li>Management of resources 管理资源</li>
+<li>Mapping among architectural elements 构建元素间的映射</li>
+<li>Binding time decisions 结合时间的决定</li>
+<li>Choice of technology 技术的选择</li>
+</ol>
+<h2 id="availability-可用性"><a href="#availability-可用性" class="headerlink" title="availability 可用性"></a>availability 可用性</h2><p>Availability refers to the ability of the system to be available for use when a fault occurs.<br>可用性是指系统在故障发生时可用的能力。<br>Availability tactics enable a system to endure faults so that services remain compliant with their specifications.<br>The tactics keep faults from becoming failures or at least bound the effects of the fault and make repair possible.<br>可用性策略使系统能够容忍故障，从而使服务与规范保持一致。<br>战术使故障不再成为故障或至少约束故障的影响并使修复成为可能。</p>
+<ul>
+<li>Detect Fault<ul>
+<li>Ping/echo</li>
+<li>Monitor</li>
+<li>Heartbeat<br>Timestamp, Condition Monitoring, Voting, Exception Detection, Self-test</li>
+</ul>
+</li>
+<li>Recover from Faults<ul>
+<li>Active Redundancy (hot spare)</li>
+<li>Spare (cold spare)</li>
+<li>Passive Redundancy (warm spare)<br>Rollback, Exception Handling, Degradation, Reconfiguration<br>降级：在组件失败的情况下维护最关键的系统功能，减少不重要的功能。<br>重构：重新分配职责，离开运作的资源，同时保持尽可能多的功能。</li>
+</ul>
+</li>
+<li>Prevent Faults<ul>
+<li>Removal From Service</li>
+<li>Transactions</li>
+<li>Predictive Model</li>
+<li>Exception Prevention</li>
+<li>Increase Competence Set<br>删除服务：暂时将系统组件置于服务状态之外，以减轻潜在的系统故障。<br>事务：捆绑状态更新，以便在分布式组件之间交换的异步消息具有原子性、一致性、隔离性和持久性。<br>预测模型：在检测到可能出现的未来故障的情况下，采取纠正措施。<br>异常预防：通过智能指针、抽象数据类型、包装器防止系统异常发生。<br>增加权限集：设计一个组件来处理更多的故障，作为其正常运行的一部分。</li>
+</ul>
+</li>
+</ul>
+<p>Detection tactics depend on detecting signs of life from various components.<br>检测策略依赖于从各个组成部分检测生命迹象。<br>Recovery tactics are retrying an operation or maintaining redundant data or computations.<br>恢复策略是重试操作或维护冗余数据或计算。<br>Prevention tactics depend on removing elements from service or limiting the scope of faults.<br>预防策略依赖于从服务中删除元素或限制故障范围。</p>
+<h4 id="Interoperability-互操作性"><a href="#Interoperability-互操作性" class="headerlink" title="Interoperability 互操作性"></a>Interoperability 互操作性</h4><p>Interoperability is about the degree to which two or more systems can usefully exchange meaningful information via interfaces in a particular context.<br>互操作性是指两个或多个系统能够通过特定上下文中的接口有效地交换有意义的信息的程度。</p>
+<ul>
+<li>Discovery</li>
+<li>Handling the response<br>Syntactic interoperability is the ability to exchange data.<br>Semantic interoperability is the ability to interpret the data being exchanged.<br>语法互操作性是交换数据的能力。<br>语义互操作性是对正在交换的数据进行解释的能力。<br>Two technology options to allow the webbased application to interoperate<br>SOAP is used in SOA systems along with a set of protocols<br>– Service description&amp; discovery, e.g., WSDL, UDDI<br>– Service composition, e.g., BPEL<br>SOAP is more complex and used for exchange messages with structured data, while REST is simple and used for small messages<br>两个技术选项允许基于Web的应用程序的互操作<br>SOAP在SOA系统中和一组协议一起使用。<br>-服务描述和发现，例如WSDL、UDDI<br>-服务组合，例如BPEL<br>SOAP更复杂，用于与结构化数据交换消息，而REST很简单，用于小消息。<h5 id="Goal-of-Interoperability-Tactics"><a href="#Goal-of-Interoperability-Tactics" class="headerlink" title="Goal of Interoperability Tactics"></a>Goal of Interoperability Tactics</h5>实现互操作性涉及到相互定位的系统，然后管理接口，以便它们交换信息。</li>
+<li>Locate</li>
+<li>Manage Interfaces</li>
+</ul>
+<h2 id="modifiability-可修改性"><a href="#modifiability-可修改性" class="headerlink" title="modifiability 可修改性"></a>modifiability 可修改性</h2><p>Modifiability is about change and our interest in it is in the cost and risk of making changes.<br>可修改性是关于变更的，我们对它的兴趣在于改变的成本和风险。</p>
+<h4 id="Goal-of-Modifiability-Tactics"><a href="#Goal-of-Modifiability-Tactics" class="headerlink" title="Goal of Modifiability Tactics"></a>Goal of Modifiability Tactics</h4><ul>
+<li>Reduce Size of a Module</li>
+<li>Increase Cohesion</li>
+<li>Reducing Coupling</li>
+<li>Defer Binding<h4 id="Publish-Subscribe-System"><a href="#Publish-Subscribe-System" class="headerlink" title="Publish/Subscribe System"></a>Publish/Subscribe System</h4></li>
+</ul>
+<h2 id="performance-性能"><a href="#performance-性能" class="headerlink" title="performance  性能"></a>performance  性能</h2><p><em>It is about time</em><br>Performance is about time and the software system’s ability to meet timing requirements<br>性能是关于时间和软件系统满足时序要求的能力。</p>
+<h4 id="Performance-Tactics"><a href="#Performance-Tactics" class="headerlink" title="Performance Tactics"></a>Performance Tactics</h4><ul>
+<li>Control Resource Demand</li>
+<li>Manage Resources</li>
+</ul>
+<h2 id="security-安全性"><a href="#security-安全性" class="headerlink" title="security 安全性"></a>security 安全性</h2><p>Security is a measure of the system’s ability to protect data and information from unauthorized access while still providing access to people and systems that are authorized<br>安全性是衡量系统保护数据和信息免受未经授权访问的能力的一种度量方法，同时还提供对被授权的人和系统的访问。</p>
+<ul>
+<li>Confidentiality 保密性</li>
+<li>Integrity 完整性</li>
+<li>Availability 可用性<br>另外一种特性分类</li>
+<li>Authentication 身份验证</li>
+<li>Authorization 授权</li>
+<li>Nonrepudiation 不可抵赖性<h4 id="Security-Tactics"><a href="#Security-Tactics" class="headerlink" title="Security Tactics"></a>Security Tactics</h4></li>
+<li>Detect Attacks</li>
+<li>Resist Attacks</li>
+<li>React to Attacks</li>
+<li>Recover from Attacks</li>
+</ul>
+<h2 id="testability-可测性"><a href="#testability-可测性" class="headerlink" title="testability 可测性"></a>testability 可测性</h2><p>Software testability refers to the ease with which software can be made to demonstrate its faults through (typically execution-based) testing.<br>软件可测试性指的是软件可以通过（通常是基于执行的）测试来演示其故障的容易程度。<br>Testability refers to the probability that it will fail on its next test execution.<br>可测试性指的是它在下一次测试执行时失败的概率。</p>
+<h4 id="Testability-Tactics"><a href="#Testability-Tactics" class="headerlink" title="Testability Tactics"></a>Testability Tactics</h4><ul>
+<li>Control and Observe System State</li>
+<li>Limit Complexity</li>
+</ul>
+<h2 id="usability-可使用性"><a href="#usability-可使用性" class="headerlink" title="usability 可使用性"></a>usability 可使用性</h2><p>Usability is concerned with how easy it is for the user to accomplish a desired task and the user support the system provides<br>可使用性涉及到用户完成所需任务和用户支持系统提供的方便程度。</p>
+<h4 id="Usability-Tactics"><a href="#Usability-Tactics" class="headerlink" title="Usability Tactics"></a>Usability Tactics</h4><ul>
+<li>Support User Initiative</li>
+<li>Support System Initiative</li>
+</ul>
+<h4 id="Portability-可移植性"><a href="#Portability-可移植性" class="headerlink" title="Portability 可移植性"></a>Portability 可移植性</h4><p>Portability refers to the ease with which software that built to run on one platform can be changed to run on a different platform. </p>
+<h3 id="Patterns-and-Tactics"><a href="#Patterns-and-Tactics" class="headerlink" title="Patterns and Tactics"></a>Patterns and Tactics</h3><p>An architecture pattern is a package of design decisions that is found repeatedly in practice has known properties that permits reuse, and describes a class of architectures<br>体系结构模式是在实践中反复发现的一种设计决策包，它知道允许重用的属性，并描述了一类体系结构。</p>
+<h4 id="Moule-patterns"><a href="#Moule-patterns" class="headerlink" title="Moule patterns"></a>Moule patterns</h4><ul>
+<li>Layered pattern 层次模式<br>The layered pattern defines layers and a unidirectional allowed-to-use relation among the layers.<br>分层模式定义层，单向允许使用层之间的关系。 <ul>
+<li>context: Modules of the system may be independently developed and maintained.<br>系统的模块可以独立开发和维护。</li>
+<li>Problem: To minimize the interaction among the different development organizations, and support portability, modifiability, and reuse.<br>问题：减少发展的不同组织之间的相互作用，并支持可移植性、可修改性、和重用。</li>
+<li>Solution: the layered pattern divides the software into units called layers. Each layer is a grouping of modules that offers a cohesive set of services. Each layer is exposed through a public interface. The usage must be unidirectional.<br>解决方案：分层模式将软件划分为层。每一层都是一组模块，它们提供了一组内聚的服务。每个层通过公共接口公开。用法必须是单向的。<h4 id="Component-and-Connector-patterns"><a href="#Component-and-Connector-patterns" class="headerlink" title="Component-and-Connector patterns"></a>Component-and-Connector patterns</h4></li>
+</ul>
+</li>
+<li>Broker pattern 代理模式<br>The broker pattern defines a runtime component, called a broker, that mediates the communication between a number of clients and servers.<br>代理模式定义了一个运行时组件，称为代理，它代理多个客户机和服务器之间的通信。<ul>
+<li>Context: Many systems are constructed from a collection of services distributed across multipl servers<br>背景：许多系统是由一组服务分布在多台服务器</li>
+<li>Problem: How do we structure distributed software so that service users do not need to know the nature and location of service providers?<br>问题：我们如何构造分布式软件，使服务使用者不需要知道服务提供者的性质和位置？</li>
+<li>Solution: The broker pattern separates clients from providers servers by inserting an intermediary, called a broker. When a client needs a service, it queries a broker via a service interface. The broker then forwards the client’s service request to a server, which processes the request.<br>解决方案：代理模式通过插入中介（称为代理）将客户机与提供者服务器分开。当客户机需要服务时，它通过服务接口查询代理。然后，代理将客户机的服务请求转发给服务器，该服务器处理请求。</li>
+</ul>
+</li>
+<li>Model-View-Controller pattern MVC模式<ul>
+<li>Context: User interface software is the most frequently modified portion of an interactive application.<br>背景：用户界面软件是交互式应用程序中最经常修改的部分。</li>
+<li>Problem: How can user interface functionality be kept separate from application functionality and yet still be responsive to user input, or to changes in the underlying application’s data? And how can multiple views of the user interface be created, maintained, and coordinated when the underlying application data changes?<br>问题：如何将用户界面功能与应用程序功能分开，但仍然响应用户输入，还是对底层应用程序的数据进行响应？当底层应用程序数据发生变化时，如何创建、维护和协调用户界面的多个视图？</li>
+<li>Solution: The model-view-controller (MVC) pattern separates application functionality into three kinds of components: A model, which contains the application’s data; A view, which displays some portion of the underlying data and interacts with the user; A controller, which mediates between the model and the view and manages the notifications of state changes<br>解决方案：模型-视图-控制器（MVC）模式将应用程序功能划分为三种组件：一个模型，其中包含应用程序的数据; 视图，显示底层数据的一部分并与用户交互; 一个控制器，它在模型和视图之间进行中介，管理状态变化的通知。</li>
+</ul>
+</li>
+<li>Pipe-and-Filter pattern 管道-过滤器模式<ul>
+<li>Context: Streaming data processing<br>背景：流数据处理</li>
+<li>Problem: How to speed up the data processing?<br>问题：如何加速数据处理？</li>
+<li>Solution: Data arrives at a filter’s input port, is transformed, and then is passed via its output port through a pipe to the next filter.  A single filter can consume data from, or produce data to, one or more ports.<br>解决方案：数据到达过滤器的输入端口，进行转换，然后通过其输出端口通过管道传递到下一个过滤器。单个筛选器可以将数据从或一个或多个端口消耗到或生成数据。</li>
+</ul>
+</li>
+<li>Client-Server pattern CS模式<ul>
+<li>Context: There are shared resources and services that large numbers of distributed clients wish to access, and for which we wish to control access or quality of service.<br>背景：大量分布式客户机希望访问共享资源和服务，我们希望控制访问或服务质量。</li>
+<li>Problem: To improve scalability and availability by centralizing the control of these resources and services.<br>问题：通过集中控制这些资源和服务来提高可伸缩性和可用性。</li>
+<li>Solution: Clients interact by requesting services of servers. Some components may act as both clients and servers. There may be one central server or multiple distributed ones<br>解决方案：客户端通过请求服务器的服务进行交互。一些组件可以同时充当客户端和服务器。可能有一个中央服务器或多个分布式服务器。</li>
+</ul>
+</li>
+<li><p>Peer-to-Peer pattern P2P模式</p>
+<ul>
+<li>Context: Distributed computational entities need to cooperate and collaborate to provide a service to a distributed community of users.<br>背景：分布式计算实体需要合作和协作以向分布式用户社区提供服务。</li>
+<li>Problem: How can a set of “equal” distributed computational entities be connected to each other via a common protocol, such that they can organize and share their services with high availability and scalability?<br>问题：一组“相同”的分布式计算实体如何通过一个公共协议相互连接，这样它们就可以组织并共享其高可用性和可伸缩性的服务？</li>
+<li>Solution: In the peer-to-peer (P2P) pattern, components directly interact as peers. All peers are “equal”. Peer-to-peer communication is typically a request/reply interaction without the asymmetry found in the clientserver pattern.<br>解决方案：在点对点（P2P）模式中，组件直接作为对等体交互。所有的peers都是平等的。对等通信是一个典型的没有不对称的CS模式发现请求/应答的作用。</li>
+</ul>
+</li>
+<li><p>Service-Oriented Architecture (SOA) pattern SOA模式</p>
+<ul>
+<li>Context: Service consumers need to be able to understand and use services without any knowledge of their implementation.<br>背景：服务消费者需要了解和使用服务，而不需要了解服务的实现。</li>
+<li>Problem: How can we support interoperability of distributed components running on different platforms and written in different implementation languages, provided by different organizations, and distributed across the Internet?<br>问题：我们如何支持在不同平台上运行的分布式组件的互操作性，以及由不同组织提供的不同实现语言编写，并在Internet上分发？</li>
+<li>Solution: The service-oriented architecture (SOA) pattern describes a collection of distributed components that provide and/or consume services.<br>解决方案：面向服务的体系结构（SOA）模式描述了提供和/或服务的分布式组件的集合。</li>
+</ul>
+</li>
+<li><p>Publish-Subscribe pattern 发布订阅模式</p>
+<ul>
+<li>Context: The precise number and nature of the data producers and consumers are not predetermined or fixed.<br>背景：数据生产者和消费者的确切数量和性质不是预先确定的或固定的。</li>
+<li>Problem: To transmit messages among the producers and consumers so they are unaware of each other’s identity, or even their existence?<br>问题：在生产者和消费者之间传递信息，使他们不知道对方的身份，甚至他们的存在？</li>
+<li>Solution: Provides decoupling in time, space and synchronization.<br>解决方案：提供时间、空间和同步的解耦。</li>
+</ul>
+</li>
+<li><p>Shared-Data pattern 共享数据模式</p>
+<ul>
+<li>Context: Various computational components need to share and manipulate large amounts of data. This data does not belong solely to any one of those components.<br>背景：各种计算组件需要共享和操作大量数据。这些数据并不完全属于这些组件中的任何一个。</li>
+<li>Problem: How can systems store and manipulate persistent data that is accessed by multiple independent components?<br>问题：系统如何存储和操作由多个独立组件访问的持久数据？</li>
+<li>Solution: In the shared-data pattern, interaction is dominated by the exchange of persistent data between multiple data accessors and at least one shared-data store. Exchange may be initiated by the accessors or the data store. The connector type is data reading and writing. Communication between data accessors is mediated by a shared data store. Data is made persistent by the data store.<br>解决方案：在共享数据模式，相互作用是由多个数据访问和至少一个共享数据存储之间的数据交流为主的持续性。交易所可以通过访问或数据存储启动。连接器类型是数据读写。之间的数据访问的通信是通过共享数据存储介。数据由数据存储持久化。<h4 id="Allocation-patterns"><a href="#Allocation-patterns" class="headerlink" title="Allocation patterns"></a>Allocation patterns</h4></li>
+</ul>
+</li>
+<li>Map-Reduce pattern Map-Reduce模式</li>
+<li>Multi-tier Pattern 多级模式</li>
+</ul>
+<h3 id="Tatics-和-Pattern"><a href="#Tatics-和-Pattern" class="headerlink" title="Tatics 和 Pattern"></a>Tatics 和 Pattern</h3><p>Patterns are built from tactics; if a pattern is a molecule, a tactic is an atom.<br>Patterns are underspecified with respect to real systems so they have to be augmented with tactics.</p>
+<h4 id="Tatics-建模与分析"><a href="#Tatics-建模与分析" class="headerlink" title="Tatics 建模与分析"></a>Tatics 建模与分析</h4><p>Analysis can be done through</p>
+<ul>
+<li>Models for some attributes 某些属性的模型</li>
+<li>Measurement 测量</li>
+<li>Simulations 模拟</li>
+<li>Prototypes 原型</li>
+<li>experiments &amp; Back-of-the-envelope analysis 实验与包络分析</li>
+</ul>
+<h4 id="敏捷开发"><a href="#敏捷开发" class="headerlink" title="敏捷开发"></a>敏捷开发</h4><p>Boehm and Turner found that projects have a “sweet spot” where up-front architecture planning pays off.<br>Boehm和Turner发现，项目有一个甜蜜点在前面的建筑规划的回报。<br>Architecture Tradeoff Analysis Method (ATAM)</p>
+<h1 id="Architecture-in-the-life-cycle"><a href="#Architecture-in-the-life-cycle" class="headerlink" title="Architecture in the life cycle"></a>Architecture in the life cycle</h1><h2 id="requirement"><a href="#requirement" class="headerlink" title="requirement"></a>requirement</h2><h4 id="ASR-Architecturally-Significant-Requirement-重要的架构需求"><a href="#ASR-Architecturally-Significant-Requirement-重要的架构需求" class="headerlink" title="ASR = Architecturally Significant Requirement = 重要的架构需求"></a>ASR = Architecturally Significant Requirement = 重要的架构需求</h4><h3 id="Approaches-to-Capture-ASRs"><a href="#Approaches-to-Capture-ASRs" class="headerlink" title="Approaches to Capture ASRs"></a>Approaches to Capture ASRs</h3><ul>
+<li>From Requirements Document</li>
+<li>By Interviewing Stakeholders</li>
+<li>By Understanding the Business Goals</li>
+<li>In Utility Tree<h4 id="ASRs-may-be-captured"><a href="#ASRs-may-be-captured" class="headerlink" title="ASRs may be captured"></a>ASRs may be captured</h4></li>
+<li>from requirements documents,</li>
+<li>by interviewing stakeholders, or</li>
+<li>by conducting a Quality Attribute Workshop.</li>
+</ul>
+<h4 id="QAW-Quality-Attribute-Workshop-质量属性研讨会"><a href="#QAW-Quality-Attribute-Workshop-质量属性研讨会" class="headerlink" title="QAW = Quality Attribute Workshop = 质量属性研讨会"></a>QAW = Quality Attribute Workshop = 质量属性研讨会</h4><p>Step 1: QAW Presentation and Introductions<br>步骤1：QAW演示和介绍<br>Step 2: Business/Mission Presentation<br>步骤2：业务/任务介绍<br>Step 3: Architectural Plan Presentation<br>步骤3：架构计划展示<br>Step 4: Identification of Architectural Drivers.<br>步骤4：确定架构驱动程序。<br>Step 5: Scenario Brainstorming.<br>步骤5：质量属性场景头脑风暴。<br>Step 6: Scenario Consolidation<br>步骤6：整合质量属性场景<br>Step 7: Scenario Prioritization<br>步骤7：给质量属性场景分优先级<br>Step 8: Scenario Refinement.<br>步骤8：对质量属性场景进行细化。</p>
+<h4 id="Capturing-ASRs-in-a-Utility-Tree"><a href="#Capturing-ASRs-in-a-Utility-Tree" class="headerlink" title="Capturing ASRs in a Utility Tree"></a>Capturing ASRs in a Utility Tree</h4><h2 id="design"><a href="#design" class="headerlink" title="design"></a>design</h2><h4 id="Design-Strategy"><a href="#Design-Strategy" class="headerlink" title="Design Strategy"></a>Design Strategy</h4><ul>
+<li><p>Decomposition<br>Architecture determines quality attributes<br>体系结构决定质量属性<br>Important quality attributes are characteristics of the whole system.<br>重要的质量属性是整个系统的特征。<br>Design begins with the whole system</p>
+<ul>
+<li>The whole system is decomposed into parts</li>
+<li>Each part may inherit all or part of the quality attribute requirements<br>设计从整个系统开始。<br>-整个系统被分解成部分<br>-每个部分都可以继承全部或部分质量属性需求。</li>
+</ul>
+</li>
+<li><p>Designing to Architecturally Significant Requirements</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Q1. What About Other Quality Requirements?</span><br><span class="line">If your design does not satisfy a particular non ASR quality requirement</span><br><span class="line">- Adjust your design so that the ASRs are still satisfied and so is this additional requirement or</span><br><span class="line">- Weaken the additional requirement so that it can be satisfied either by the current design or by a modification of the current design or</span><br><span class="line">- Change the priorities so that the one not satisfied becomes one of the ASRs or</span><br><span class="line">- Declare the additional requirement non-satisfiable in conjunction with the ASRs.</span><br><span class="line">如果您的设计不满足特定的非ASR质量要求</span><br><span class="line">调整你的设计，ASRs还满意，所以这是额外的要求或</span><br><span class="line">削弱额外的要求，使之能够满足当前设计或修改当前的设计或</span><br><span class="line">变化的重点，一个不满意成为一个ASR或</span><br><span class="line">申报的额外要求非与ASRs一起满足。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Generate and Test</p>
+</li>
+</ul>
+<ol>
+<li>View the current design as a hypothesis.<br>把当前的设计看作是一个假设。</li>
+<li>Ask whether the current design satisfies the requirements (test)<br>询问当前的设计是否满足要求（测试）</li>
+<li>If not, then generate a new hypothesis<br>如果没有，则产生一个新的假设。<h3 id="ADD-The-Attribute-Driven-Design-Method-属性驱动设计方法"><a href="#ADD-The-Attribute-Driven-Design-Method-属性驱动设计方法" class="headerlink" title="ADD = The Attribute-Driven Design Method = 属性驱动设计方法"></a>ADD = The Attribute-Driven Design Method = 属性驱动设计方法</h3>An iterative method. At each iteration you</li>
+</ol>
+<ul>
+<li>Choose a part of the system to design.</li>
+<li>Marshal all the architecturally significant requirements for that part.</li>
+<li>Generate and test a design for that part.<br>ADD does not result in a complete design</li>
+<li>Set of containers with responsibilities</li>
+<li>Interactions and information flow among containers<br>Does not produce an API for containers.<br>迭代法。每次迭代时<br>-选择系统的一部分进行设计。<br>-把所有重要的建筑要求的那一部分。<br>-生成并测试该部分的设计。<br>添加不会导致完整的设计。<br>-有责任的容器集<br>-容器间的交互和信息流<br>不为容器生成api。<h4 id="step-of-ADD"><a href="#step-of-ADD" class="headerlink" title="step of ADD"></a>step of ADD</h4></li>
+</ul>
+<ol>
+<li>Choose an element of the system to design.<br>选择系统的元素进行设计。</li>
+<li>Identify the ASRs for the chosen element.<br>确定所选元素的ASRs</li>
+<li>Generate a design solution for the chosen element.<br>为所选元素生成设计解决方案。</li>
+<li>Inventory remaining requirements and select the input for the next iteration.<br>统计剩余需求，并为下一次迭代选择输入。</li>
+<li>Repeat steps 1–4 until all the ASRs have been satisfied.<br>重复步骤1到4直到ASRS满足。</li>
+</ol>
+<h2 id="implementation"><a href="#implementation" class="headerlink" title="implementation"></a>implementation</h2><h3 id="Four-techniques-to-keep-the-code-and-the-architecture-consistent"><a href="#Four-techniques-to-keep-the-code-and-the-architecture-consistent" class="headerlink" title="Four techniques to keep the code and the architecture consistent:"></a>Four techniques to keep the code and the architecture consistent:</h3><ul>
+<li>Embedding the design in the code<br><em>将设计嵌入代码中</em><br>实施者知道他们正在实施什么样的建筑结构。<br>它们可以将代码中的体系结构文档作为注释记录。然后任何人拿起代码都会知道一些约束条件。<br>然后工具可以自动关联代码和体系结构。</li>
+<li>Frameworks<br><em>框架方法</em><br>框架是围绕特定主题组织起来的可重用的库或类集。<br>程序员使用框架提供的服务。</li>
+<li>Code templates<br><em>代码模版方法</em><br>代码模板是代码集合，程序员在其中提供特定于应用程序的部分。</li>
+<li>Keeping code and architecture consistent (i.e. avoiding architecture erosion)<br><em>保持代码和体系结构的一致性（即避免体系结构的侵蚀）</em><br>实现将偏离文档体系结构。<br>实施者可能做出的决定是不一致或相互或与架构。<br>架构可能没有预见，提出所有的可能性<h4 id="Preventing-Architecture-Erosion"><a href="#Preventing-Architecture-Erosion" class="headerlink" title="Preventing Architecture Erosion"></a>Preventing Architecture Erosion</h4>Use tools to enforce architectural constraints. can have architecture rules added that are enforced<br>during a build<br>Give more credence/freedom to remaining portion when creating code template<br>Schedule documentation/code synchronization times.<br>使用工具强制架构约束。可以添加被强制执行的架构规则<br>在生成过程中<br>在创建代码模板时，给剩下的部分更多的信任/自由<br>计划文档/代码同步时间。</li>
+</ul>
+<h2 id="test"><a href="#test" class="headerlink" title="test"></a>test</h2><h3 id="Two-Levels-of-Testing"><a href="#Two-Levels-of-Testing" class="headerlink" title="Two Levels of Testing"></a>Two Levels of Testing</h3><h4 id="Unit-testing-tests-running-on-specific-pieces-of-software"><a href="#Unit-testing-tests-running-on-specific-pieces-of-software" class="headerlink" title="Unit testing: tests running on specific pieces of software."></a>Unit testing: tests running on specific pieces of software.</h4><p>What is needed to test:<br>– Responsibilities for functional correctness<br>功能正确性的职责<br>– Performance through synthetic loads<br>综合负荷性能<br>– Availability through fault injection.<br>通过故障注入的可用性。<br>– Modifiability requirements can also be tested by assigning changes to test teams.<br>可变性的要求也可以通过分配的变化，测试团队进行测试。</p>
+<h4 id="Integration-Testing-to-test-what-happens-when-separate-software-units-start-to-work-together"><a href="#Integration-Testing-to-test-what-happens-when-separate-software-units-start-to-work-together" class="headerlink" title="Integration Testing: to test what happens when separate software units start to work together"></a>Integration Testing: to test what happens when separate software units start to work together</h4><p>Integration test can test functionality, performance, availability, and security.<br>Security can be tested by having the test executes various attack scenarios.<br>Systems may degrade after being run for a long time if resources are not freed or a configuration is incorrectly specified.<br>集成测试可以测试功能、性能、可用性和安全性。<br>通过测试执行各种攻击场景，可以对安全性进行测试。<br>如果资源未释放或配置错误指定，系统运行很长时间后可能会降级。</p>
+<h5 id="Black-Box-Testing"><a href="#Black-Box-Testing" class="headerlink" title="Black-Box Testing"></a>Black-Box Testing</h5><h5 id="White-Box-Testing"><a href="#White-Box-Testing" class="headerlink" title="White-Box Testing"></a>White-Box Testing</h5><h2 id="evaluation"><a href="#evaluation" class="headerlink" title="evaluation"></a>evaluation</h2><p>Three Forms of Evaluation</p>
+<h3 id="Evaluation-by-the-designer-within-the-design-process"><a href="#Evaluation-by-the-designer-within-the-design-process" class="headerlink" title="Evaluation by the designer within the design process."></a>Evaluation by the designer within the design process.</h3><p>设计者在设计过程中的评价。<br>Every time the designer makes a key design decision, the chosen alternatives should be evaluated<br>每次设计者做出关键的设计决策时，所选择的方案都要进行评估。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">How much analysis? Three factors include:</span><br><span class="line">– The importance of the decision.</span><br><span class="line">决定的重要性。</span><br><span class="line">– The number of potential alternatives. More alternatives need more time in evaluating them.</span><br><span class="line">潜在替代品的数量。更多的选择需要更多的时间来评估它们。</span><br><span class="line">– Good enough as opposed to perfect. Do not spend more time on a decision than it is worth.</span><br><span class="line">-足够好，而不是完美。不要把更多的时间花在决定上，而不是花在它的价值上。</span><br></pre></td></tr></table></figure></p>
+<h3 id="Evaluation-by-peers-within-the-design-process"><a href="#Evaluation-by-peers-within-the-design-process" class="headerlink" title="Evaluation by peers within the design process."></a>Evaluation by peers within the design process.</h3><p>同行在设计过程中的评价。<br>Architectural designs can be peer reviewed, just as code can.<br>建筑设计可以像代码一样进行同行评审。<br>A peer review can be carried out at any point of the design process where a candidate architecture, or at least a coherent reviewable part of one, exists.<br>同行评审可以进行在任何点的设计过程中，候选建筑，或者至少是一个连贯的审查的一部分，存在。<br>Allocate at least several hours and possibly half a day.<br>分配至少几个小时，可能半天</p>
+<h3 id="Analysis-by-outsiders-once-the-architecture-has-been-designed"><a href="#Analysis-by-outsiders-once-the-architecture-has-been-designed" class="headerlink" title="Analysis by outsiders once the architecture has been designed."></a>Analysis by outsiders once the architecture has been designed.</h3><p>一旦架构被设计出来，由局外人分析。<br>“Outside” is relative; this may mean<br>– outside the development project<br>– outside the business unit where the project resides but within the same company<br>– outside the company.<br>“外”是相对的，这可能意味着<br>-在开发项目之外<br>-在项目所在的业务单元之外 但在同一家公司<br>-公司以外<br>Outsiders are chosen because they possess specialized knowledge or experience<br>Managers tend to be more inclined to listen to problems uncovered by an outside team.<br>Be used to evaluate complete architectures.<br>外人之所以选择，是因为他们具有专门知识或经验。<br>经理倾向于更倾向于倾听外部团队发现的问题。<br>用于评估完整的体系结构。</p>
+<h4 id="ATAM-Architecture-Tradeoff-Analysis-Method-架构权衡分析方法"><a href="#ATAM-Architecture-Tradeoff-Analysis-Method-架构权衡分析方法" class="headerlink" title="ATAM = Architecture Tradeoff Analysis Method = 架构权衡分析方法"></a>ATAM = Architecture Tradeoff Analysis Method = 架构权衡分析方法</h4><p>Step 1: Present the ATAM<br>Step 2: Present Business Drivers<br>Step 3: Present the Architecture<br>Step 4: Identify Architectural Approaches<br>Step 5: Generate Utility Tree<br>Step 6: Analyze Architectural Approaches<br>Step 7: Brainstorm and Prioritize Scenarios<br>Step 8: Analyze Architectural Approaches<br>Step 9: Present Results<br>步骤1：介绍ATAM<br>步骤2：现在的业务驱动程序<br>步骤3：呈现架构<br>步骤4：确定架构方法<br>步骤5：生成Utility Tree<br>步骤6：分析架构方法<br>步骤7：头脑风暴和优先考虑情景<br>步骤8：分析架构方法<br>步骤9：展示结果</p>
+<h4 id="Lightweight-Architectural-Evaluation"><a href="#Lightweight-Architectural-Evaluation" class="headerlink" title="Lightweight Architectural Evaluation"></a>Lightweight Architectural Evaluation</h4><p>An ATAM is a substantial undertaking<br>– It requires some 20 to 30 person-days of effort from an<br>evaluation team, plus even more for the architect and<br>stakeholders.<br>– Investing this amount of time makes sense on a large and<br>costly project<br>• A Lightweight Architecture Evaluation method for<br>smaller, less risky projects.<br>– May take place in a single day, or even a half-day meeting.<br>– May be carried out entirely by members internal to the<br>organization.<br>– Of course this may not probe the architecture as deeply</p>
+<h4 id="Architecture-and-Product-Lines"><a href="#Architecture-and-Product-Lines" class="headerlink" title="Architecture and Product Lines"></a>Architecture and Product Lines</h4><p>A product line is strategic, planned reuse.<br>• The product line approach to developing software can pay huge dividends.<br>• Requires an understanding of:<br>– Architecture<br>– Organizational issues<br>– Process issues<br>产品线是战略性的、计划重用的。<br>•开发软件的产品线方法可以带来巨大的收益。<br>•需要了解：<br>–架构<br>–组织问题<br>–过程问题</p>
+<h1 id="Architesture-in-the-Cloud"><a href="#Architesture-in-the-Cloud" class="headerlink" title="Architesture in the Cloud"></a>Architesture in the Cloud</h1><p>Cloud computing is an information technology (IT) paradigm that enables ubiquitous access to shared pools of system resources and higherlevel services that can be rapidly provisioned with minimal management effort, often over the Internet.<br>云计算是信息技术（IT）的范式，使随时随地访问系统资源和高层次的服务，可以快速配置以最小的管理工作共享池，经常在互联网上。<br>The cloud provides a new platform for applications with some different characteristics.<br>Architect needs to know how a cloud cluster works and pay special attention to<br>– Security<br>– Performance<br>– Availability<br>云提供了一个具有不同特性的应用程序的新平台。<br>架构师需要知道云集群是如何工作的，并特别关注<br>–安全<br>–性能<br>–可用性</p>
+<h1 id="复习提纲"><a href="#复习提纲" class="headerlink" title="复习提纲"></a>复习提纲</h1><h2 id="Part-I-Introduction-of-software-architecture"><a href="#Part-I-Introduction-of-software-architecture" class="headerlink" title="Part I Introduction of software architecture"></a>Part I Introduction of software architecture</h2><h3 id="What"><a href="#What" class="headerlink" title="What?"></a>What?</h3><ul>
+<li>definition</li>
+<li>3 types of structures</li>
+<li>architecture</li>
+<li>patterns &amp; tactics</li>
+</ul>
+<h3 id="Why"><a href="#Why" class="headerlink" title="Why?"></a>Why?</h3><ul>
+<li>4 Context of Software Architecture</li>
+</ul>
+<h2 id="Part-II-Quality-attributes"><a href="#Part-II-Quality-attributes" class="headerlink" title="Part II Quality attributes"></a>Part II Quality attributes</h2><h3 id="Availability-interoperability-modifiability-performance-security-testability-usability-and-others"><a href="#Availability-interoperability-modifiability-performance-security-testability-usability-and-others" class="headerlink" title="Availability, interoperability, modifiability, performance, security, testability, usability and others"></a>Availability, interoperability, modifiability, performance, security, testability, usability and others</h3><ul>
+<li>Definitions, general scenarios &amp; concrete scenarios of<br>quality attributes, tactics</li>
+<li>Architecture patterns and tactics</li>
+<li>Quality attributes modeling and analysis: availability and performance</li>
+</ul>
+<h2 id="Part-III-Architecture-in-the-life-cycle"><a href="#Part-III-Architecture-in-the-life-cycle" class="headerlink" title="Part III Architecture in the life cycle"></a>Part III Architecture in the life cycle</h2><ul>
+<li>Architecture in agile project: architecture and<br>agility</li>
+<li>Architecture and requirement: approaches to<br>gather ASR, utility tree</li>
+<li>Designing an architecture: design strategies, ADD</li>
+<li>Architecture, implementation, and testing</li>
+<li>Architecture evaluations</li>
+</ul>
+<h2 id="Other-parts"><a href="#Other-parts" class="headerlink" title="Other parts"></a>Other parts</h2><ul>
+<li>Software product lines</li>
+<li>Architecture in the cloud</li>
+</ul>
+<p>Chapter 1. What is Software Architecture?<br>理解：软件体系结构（软件架构）的定义、架构模式的概念。<br>掌握：软件系统有哪几类结构？在每类结构里，元素及其之间的关系是什么？每类结构各有哪些常见的结构？其特点是什么？<br>了解：结构与视图是什么关系？好的结构的一些经验法则。</p>
+<p>Chapter 2. Why is Software Architecture Important?<br>理解：13个理由。</p>
+<p>Chapter 3. The Many Contexts of Software Architecture<br>理解：技术环境、项目生命周期、商业环境、架构师职业环境中的软件体系结构。架构与环境的相互影响。<br>了解：涉众。</p>
+<p>Chapter 4. Understanding Quality Attributes<br>了解：系统的功能需求。功能需求与系统架构的关系。功能需求与质量需求的关系。系统约束。<br>理解：系统的质量需求。战术的概念。<br>掌握：质量属性场景的概念和举例。质量设计的7种决策。</p>
+<p>Chapter 5. Availability<br>理解：可用性概念。<br>了解：可用性公式。可用性一般场景。<br>掌握：可用性战术。可用性设计清单。</p>
+<p>Chapter 6. Interoperability<br>理解：互操作性概念。<br>了解：互操作性一般场景。<br>掌握：互操作性战术。互操作性设计清单。</p>
+<p>Chapter 7. Modifiability<br>理解：可修改性概念。<br>了解：可修改性一般场景。<br>掌握：可修改性战术。可修改性设计清单。</p>
+<p>Chapter 8. Performance<br>理解：性能概念。<br>了解：性能公式。性能一般场景。<br>掌握：性能战术。性能设计清单。</p>
+<p>Chapter 9. Security<br>理解：安全性概念。<br>了解：安全一般场景。<br>掌握：安全性战术。安全性设计清单。</p>
+<p>Chapter 10. Testability<br>理解：可测试性概念。<br>了解：可测试性一般场景。<br>掌握：可测试性战术。可测试性设计清单。</p>
+<p>Chapter 11. Usability<br>理解：易用性概念。<br>了解：易用性一般场景。<br>掌握：易用性战术。易用性设计清单。</p>
+<p>Chapter 12. Other Quality Attributes<br>了解：其它软件质量属性如可变性、可移植性、开发可分布性、伸缩性、可部署性、移动性、可监控性、生命财产安全性。其它类别的质量属性如架构质量属性、商业属性、系统质量属性。ISO/IEC FCD 25010 产品质量标准。<br>理解：如何处理未知的质量属性。</p>
+<p>Chapter 13. Patterns and Tactics<br>了解：架构模式（架构风格）的概念。<br>掌握：层次模式、代理模式、MVC模式、管道-过滤器模式、CS模式、P2P模式、SOA模式、发布订阅模式、共享数据模式、Map-Reduce模式、多级模式。<br>理解：模式与战术的关系。</p>
+<p>Chapter 14. Quality Attribute Modeling and Analysis<br>了解：模型。常见质量属性模型的成熟度。<br>了解：思想实验。粗略分析。原型。模拟仿真。实验。</p>
+<p>Chapter 15. Architectures in Agile Projects<br>了解：敏捷开发思想与准则。<br>理解：敏捷开发的甜蜜点。<br>了解：敏捷开发与架构编档。敏捷开发与架构演化。</p>
+<p>Chapter 16. Architecture and Requirements<br>理解：ASR。ASR的几种获取方法。QAW。<br>了解：商业目标场景。<br>理解：PALM方法。<br>掌握：效用树。</p>
+<p>Chapter 17. Designing an Architecture<br>理解：Generate and Test（架构设计的假设检验法）。初始化、迭代、终结。<br>掌握：ADD方法。</p>
+<p>Chapter 18. Documenting Software Architectures<br>理解：架构编档的重要性。架构文档的用途、读者。<br>了解：如何选择视图进行编档。<br>掌握：如何对视图进行编档。视图文档模版。架构文档摘要信息。如何对系统行为进行编档。如何对质量属性进行编档。</p>
+<p>Chapter 19. Architecture, Implementation, and Testing<br>理解：实现与架构的一致性。<br>掌握：将架构嵌入代码。框架方法。代码模版方法。防止架构侵蚀。<br>了解：架构师在测试中的角色。</p>
+<p>Chapter 20. Architecture Reconstruction and Conformance<br>了解：架构重构的背景和目的。<br>理解：架构重构的阶段。每个阶段的方法。</p>
+<p>Chapter 21. Architecture Evaluation<br>了解：架构评审的3种形式及其特点。轻量级架构评审。<br>掌握：ATAM方法：目的、参与人员、步骤、采用的方法、结论。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/软件体系架构/" rel="tag"># 软件体系架构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2017/机器学习.html" rel="next" title="机器学习">
+                <i class="fa fa-chevron-left"></i> 机器学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2018/docker使用总结.html" rel="prev" title="docker使用总结">
+                docker使用总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="UltramanGaia" />
+            
+              <p class="site-author-name" itemprop="name">UltramanGaia</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction-of-software-architecture"><span class="nav-number">1.</span> <span class="nav-text">Introduction of software architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-Software-Architecture"><span class="nav-number">1.1.</span> <span class="nav-text">what is Software Architecture?</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#The-software-architecture-of-a-system-is-the-set-of-structures-needed-to-reason-about-the-system-which-comprise-software-elements-relations-among-them-and-properties-of-both"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">The software architecture of a system is the set of structures needed to reason about the system, which comprise software elements, relations among them, and properties of both.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Module-Structure"><span class="nav-number">1.1.1.</span> <span class="nav-text">Module Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Some-useful-module-structures"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Some useful module structures</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Component-and-Connector-Structure"><span class="nav-number">1.1.2.</span> <span class="nav-text">Component and Connector Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Some-useful-C-amp-C-Structure"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">Some useful C&amp;C Structure</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Allocation-Structure"><span class="nav-number">1.1.3.</span> <span class="nav-text">Allocation Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Some-useful-Allocation-structures"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">Some useful Allocation structures</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#结构和视图-structure-and-view"><span class="nav-number">1.1.3.1.1.</span> <span class="nav-text">结构和视图　structure and view</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Architecture-Pattern-架构模式"><span class="nav-number">1.1.4.</span> <span class="nav-text">Architecture Pattern 架构模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-Is-Software-Architecture-Important"><span class="nav-number">1.2.</span> <span class="nav-text">Why Is Software Architecture Important?</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Whether-a-system-will-be-able-to-exhibit-its-desired-or-required-quality-attributes-is-substantially-determined-by-its-architecture"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">Whether a system will be able to exhibit its desired (or required) quality attributes is substantially determined by its architecture.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3类变更"><span class="nav-number">1.2.1.</span> <span class="nav-text">3类变更</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-many-contexts-of-software-architecture-软件体系结构的多种背景"><span class="nav-number">1.3.</span> <span class="nav-text">The many contexts of software architecture 软件体系结构的多种背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Technical"><span class="nav-number">1.3.1.</span> <span class="nav-text">Technical</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Project-life-cycle"><span class="nav-number">1.3.2.</span> <span class="nav-text">Project life cycle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Business"><span class="nav-number">1.3.3.</span> <span class="nav-text">Business</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Professional"><span class="nav-number">1.3.4.</span> <span class="nav-text">Professional</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#技术环境、项目生命周期、商业环境、架构师职业环境中的软件体系结构。架构与环境的相互影响。"><span class="nav-number">1.3.4.0.1.</span> <span class="nav-text">技术环境、项目生命周期、商业环境、架构师职业环境中的软件体系结构。架构与环境的相互影响。</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Quality-attributes"><span class="nav-number">2.</span> <span class="nav-text">Quality attributes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Understanding-Quality-Attributes"><span class="nav-number">2.0.1.</span> <span class="nav-text">Understanding Quality Attributes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两类质量属性"><span class="nav-number">2.0.2.</span> <span class="nav-text">两类质量属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-solution-to-the-problems-untestable-definitions-and-overlapping-concerns-is-to-use-quality-attribute-scenarios-as-a-means-of-characterizing-quality-attributes"><span class="nav-number">2.0.3.</span> <span class="nav-text">A solution to the problems (untestable definitions and overlapping concerns) is to use quality attribute scenarios as a means of characterizing quality attributes.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#描述质量属性场景-quality-attribute-scenarios"><span class="nav-number">2.0.4.</span> <span class="nav-text">描述质量属性场景 quality attribute scenarios</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#质量属性场景分类"><span class="nav-number">2.0.5.</span> <span class="nav-text">质量属性场景分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tactics"><span class="nav-number">2.0.6.</span> <span class="nav-text">Tactics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tactics-VS-Architectute-pattern"><span class="nav-number">2.0.7.</span> <span class="nav-text">Tactics VS Architectute pattern</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#We-need-to-isolate-catalog-and-describe-the-tactics-Why-do-we-do-this"><span class="nav-number">2.0.7.1.</span> <span class="nav-text">We need to isolate, catalog, and describe the tactics. Why do we do this?</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Guiding-Quality-Design-Decisions"><span class="nav-number">2.0.8.</span> <span class="nav-text">Guiding Quality Design Decisions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#availability-可用性"><span class="nav-number">2.1.</span> <span class="nav-text">availability 可用性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Interoperability-互操作性"><span class="nav-number">2.1.0.1.</span> <span class="nav-text">Interoperability 互操作性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Goal-of-Interoperability-Tactics"><span class="nav-number">2.1.0.1.1.</span> <span class="nav-text">Goal of Interoperability Tactics</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#modifiability-可修改性"><span class="nav-number">2.2.</span> <span class="nav-text">modifiability 可修改性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Goal-of-Modifiability-Tactics"><span class="nav-number">2.2.0.1.</span> <span class="nav-text">Goal of Modifiability Tactics</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Publish-Subscribe-System"><span class="nav-number">2.2.0.2.</span> <span class="nav-text">Publish/Subscribe System</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#performance-性能"><span class="nav-number">2.3.</span> <span class="nav-text">performance  性能</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Performance-Tactics"><span class="nav-number">2.3.0.1.</span> <span class="nav-text">Performance Tactics</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#security-安全性"><span class="nav-number">2.4.</span> <span class="nav-text">security 安全性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Security-Tactics"><span class="nav-number">2.4.0.1.</span> <span class="nav-text">Security Tactics</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#testability-可测性"><span class="nav-number">2.5.</span> <span class="nav-text">testability 可测性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Testability-Tactics"><span class="nav-number">2.5.0.1.</span> <span class="nav-text">Testability Tactics</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#usability-可使用性"><span class="nav-number">2.6.</span> <span class="nav-text">usability 可使用性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Usability-Tactics"><span class="nav-number">2.6.0.1.</span> <span class="nav-text">Usability Tactics</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Portability-可移植性"><span class="nav-number">2.6.0.2.</span> <span class="nav-text">Portability 可移植性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Patterns-and-Tactics"><span class="nav-number">2.6.1.</span> <span class="nav-text">Patterns and Tactics</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Moule-patterns"><span class="nav-number">2.6.1.1.</span> <span class="nav-text">Moule patterns</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Component-and-Connector-patterns"><span class="nav-number">2.6.1.2.</span> <span class="nav-text">Component-and-Connector patterns</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Allocation-patterns"><span class="nav-number">2.6.1.3.</span> <span class="nav-text">Allocation patterns</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tatics-和-Pattern"><span class="nav-number">2.6.2.</span> <span class="nav-text">Tatics 和 Pattern</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tatics-建模与分析"><span class="nav-number">2.6.2.1.</span> <span class="nav-text">Tatics 建模与分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#敏捷开发"><span class="nav-number">2.6.2.2.</span> <span class="nav-text">敏捷开发</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Architecture-in-the-life-cycle"><span class="nav-number">3.</span> <span class="nav-text">Architecture in the life cycle</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#requirement"><span class="nav-number">3.1.</span> <span class="nav-text">requirement</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ASR-Architecturally-Significant-Requirement-重要的架构需求"><span class="nav-number">3.1.0.1.</span> <span class="nav-text">ASR = Architecturally Significant Requirement = 重要的架构需求</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Approaches-to-Capture-ASRs"><span class="nav-number">3.1.1.</span> <span class="nav-text">Approaches to Capture ASRs</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ASRs-may-be-captured"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">ASRs may be captured</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#QAW-Quality-Attribute-Workshop-质量属性研讨会"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">QAW = Quality Attribute Workshop = 质量属性研讨会</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Capturing-ASRs-in-a-Utility-Tree"><span class="nav-number">3.1.1.3.</span> <span class="nav-text">Capturing ASRs in a Utility Tree</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#design"><span class="nav-number">3.2.</span> <span class="nav-text">design</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Design-Strategy"><span class="nav-number">3.2.0.1.</span> <span class="nav-text">Design Strategy</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ADD-The-Attribute-Driven-Design-Method-属性驱动设计方法"><span class="nav-number">3.2.1.</span> <span class="nav-text">ADD = The Attribute-Driven Design Method = 属性驱动设计方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#step-of-ADD"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">step of ADD</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#implementation"><span class="nav-number">3.3.</span> <span class="nav-text">implementation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Four-techniques-to-keep-the-code-and-the-architecture-consistent"><span class="nav-number">3.3.1.</span> <span class="nav-text">Four techniques to keep the code and the architecture consistent:</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Preventing-Architecture-Erosion"><span class="nav-number">3.3.1.1.</span> <span class="nav-text">Preventing Architecture Erosion</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test"><span class="nav-number">3.4.</span> <span class="nav-text">test</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Two-Levels-of-Testing"><span class="nav-number">3.4.1.</span> <span class="nav-text">Two Levels of Testing</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Unit-testing-tests-running-on-specific-pieces-of-software"><span class="nav-number">3.4.1.1.</span> <span class="nav-text">Unit testing: tests running on specific pieces of software.</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Integration-Testing-to-test-what-happens-when-separate-software-units-start-to-work-together"><span class="nav-number">3.4.1.2.</span> <span class="nav-text">Integration Testing: to test what happens when separate software units start to work together</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Black-Box-Testing"><span class="nav-number">3.4.1.2.1.</span> <span class="nav-text">Black-Box Testing</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#White-Box-Testing"><span class="nav-number">3.4.1.2.2.</span> <span class="nav-text">White-Box Testing</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#evaluation"><span class="nav-number">3.5.</span> <span class="nav-text">evaluation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Evaluation-by-the-designer-within-the-design-process"><span class="nav-number">3.5.1.</span> <span class="nav-text">Evaluation by the designer within the design process.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Evaluation-by-peers-within-the-design-process"><span class="nav-number">3.5.2.</span> <span class="nav-text">Evaluation by peers within the design process.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analysis-by-outsiders-once-the-architecture-has-been-designed"><span class="nav-number">3.5.3.</span> <span class="nav-text">Analysis by outsiders once the architecture has been designed.</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ATAM-Architecture-Tradeoff-Analysis-Method-架构权衡分析方法"><span class="nav-number">3.5.3.1.</span> <span class="nav-text">ATAM = Architecture Tradeoff Analysis Method = 架构权衡分析方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lightweight-Architectural-Evaluation"><span class="nav-number">3.5.3.2.</span> <span class="nav-text">Lightweight Architectural Evaluation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Architecture-and-Product-Lines"><span class="nav-number">3.5.3.3.</span> <span class="nav-text">Architecture and Product Lines</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Architesture-in-the-Cloud"><span class="nav-number">4.</span> <span class="nav-text">Architesture in the Cloud</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复习提纲"><span class="nav-number">5.</span> <span class="nav-text">复习提纲</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-I-Introduction-of-software-architecture"><span class="nav-number">5.1.</span> <span class="nav-text">Part I Introduction of software architecture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#What"><span class="nav-number">5.1.1.</span> <span class="nav-text">What?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Why"><span class="nav-number">5.1.2.</span> <span class="nav-text">Why?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-II-Quality-attributes"><span class="nav-number">5.2.</span> <span class="nav-text">Part II Quality attributes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Availability-interoperability-modifiability-performance-security-testability-usability-and-others"><span class="nav-number">5.2.1.</span> <span class="nav-text">Availability, interoperability, modifiability, performance, security, testability, usability and others</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-III-Architecture-in-the-life-cycle"><span class="nav-number">5.3.</span> <span class="nav-text">Part III Architecture in the life cycle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Other-parts"><span class="nav-number">5.4.</span> <span class="nav-text">Other parts</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">UltramanGaia</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.4.4</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).substring(1);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

